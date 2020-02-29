@@ -9,6 +9,6 @@ app.use("/graphql", new expressGraphQL({
     graphiql:true
 }));
 
-app.listen(5000,() => {
+app.listen(5000, () => {
    console.log("Server Started");
 });

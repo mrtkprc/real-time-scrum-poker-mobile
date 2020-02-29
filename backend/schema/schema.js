@@ -12,7 +12,8 @@ const SessionType = new GraphQLObjectType({
     name: "Session",
     fields: () => ({
         id: {type: GraphQLID},
-        description: {type: GraphQLString}
+        description: {type: GraphQLString},
+        participants:{type: new GraphQLList(GraphQLString)}
     })
 });
 
@@ -23,7 +24,7 @@ const RootQuery = new GraphQLObjectType({
             type: SessionType,
             args:{ id: { type: GraphQLID } },
             resolve(parent, args){
-                return {id: "1", description: "Mert KOPRUCU"}
+                return {id: "1", description: "Mert KOPRUCU", participants:["MK","EB"]}
             }
         }
     }
