@@ -108,3 +108,5 @@ android
 ios
 
 __tests__
+
+backend/node_modules
