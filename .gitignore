@@ -110,3 +110,7 @@ ios
 __tests__
 
 backend/node_modules
+
+.idea
+/backend/yarn.lock
+/android/app/build/
