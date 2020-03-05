@@ -1,20 +1,12 @@
 // query resolvers
 const Query = require('./query/Query');
-
-//const Director = require('./query/Director');
+const Participant = require('./query/Participant');
 
 // mutation resolvers
 const Mutation = require('./mutation/index');
 
 module.exports = {
 	Query,
-	Mutation
-};
-
-/*
-module.exports = {
-	Query,
 	Mutation,
-	Director
+	Participant
 };
-*/

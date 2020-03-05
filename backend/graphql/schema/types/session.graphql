@@ -1,0 +1,17 @@
+type Query{
+    session(id: Int!): Session!
+}
+
+type Session{
+    id: Int!
+    description: String
+}
+
+type Mutation{
+    createSession(data: CreateSessionInput): Session!
+}
+
+input CreateSessionInput{
+    id: Int!
+    description: String
+}
