@@ -1,7 +1,7 @@
-const director = require('./director.mutation');
+const participant = require('./participant.mutation');
 
 const Mutation = {
-	...director,
+	...participant,
 };
 
 module.exports = Mutation;

@@ -1,5 +1,5 @@
-# import Query from "./types/user.graphql"
-# import Mutation from "./types/user.graphql"
+# import Query from "./types/participant.graphql"
+# import Mutation from "./types/participant.graphql"
 
 
 

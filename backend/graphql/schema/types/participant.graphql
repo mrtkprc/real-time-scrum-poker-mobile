@@ -1,0 +1,18 @@
+type Query {
+    participant(id: ID!): Participant!
+}
+
+type Participant {
+    id: ID!
+    nickname: String!
+    session_number: Int!
+}
+
+type Mutation{
+    createParticipant(data: CreateParticipantInput!): Participant!
+}
+
+input CreateParticipantInput {
+    nickname: String!,
+    session_number: Int!
+}
