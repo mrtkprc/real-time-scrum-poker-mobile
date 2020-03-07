@@ -11,6 +11,7 @@ db();
 
 const Participant = require('./models/Participant');
 const Session = require('./models/Session');
+const Manager = require('./models/Manager');
 
 // resolvers
 const resolvers = require('./graphql/resolvers/index');
@@ -21,7 +22,8 @@ const server = new ApolloServer({
 	resolvers,
 	context: ({req}) => ({
 		Participant,
-        Session
+        Session,
+        Manager
 	})
 });
 

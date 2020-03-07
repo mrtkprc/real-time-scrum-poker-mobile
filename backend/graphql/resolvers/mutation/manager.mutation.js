@@ -1,5 +1,13 @@
 module.exports = {
-    createManager: (parent, args, ctx) => {
-        return {id: "1", nickname: "my_manager_mutation"};
+    createManager: async (parent, {data: {nickname, sessionId}}, {Manager}) => {
+        try{
+            return await new Manager({
+                nickname,
+                sessionId
+            }).save();
+
+        }catch(e){
+            throw new Error(e);
+        }
     }
 };
