@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const sessionSchema = new Schema({
-    sessionNumber: Number,
+    sessionNumber: {type: "Number", unique: true},
     description: String
 });
 
