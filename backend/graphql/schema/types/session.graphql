@@ -3,7 +3,8 @@ type Query{
 }
 
 type Session{
-    id: Int!
+    id: ID!
+    sessionNumber: Int!
     description: String
     participants: [Participant]
 }
@@ -13,6 +14,6 @@ type Mutation{
 }
 
 input CreateSessionInput{
-    id: Int!
+    sessionNumber: Int!
     description: String
 }

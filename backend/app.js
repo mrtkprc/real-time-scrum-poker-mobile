@@ -10,6 +10,7 @@ db();
 //models
 
 const Participant = require('./models/Participant');
+const Session = require('./models/Session');
 
 // resolvers
 const resolvers = require('./graphql/resolvers/index');
@@ -19,7 +20,8 @@ const server = new ApolloServer({
 	typeDefs: importSchema('./graphql/schema/schema.graphql'),
 	resolvers,
 	context: ({req}) => ({
-		Participant
+		Participant,
+        Session
 	})
 });
 
