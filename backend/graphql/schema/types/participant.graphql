@@ -14,5 +14,5 @@ type Mutation{
 
 input CreateParticipantInput {
     nickname: String!,
-    session_id: Int!
+    sessionId: Int!
 }
