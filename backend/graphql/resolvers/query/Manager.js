@@ -1,6 +1,6 @@
 const Manager = {
-    session: (parent, args, { db }) => {
-        return {id: 11, description: "Session under Participant"}
+    session: (parent, args, { Session }) => {
+        return Session.findById(parent.sessionId);
     }
 };
 
