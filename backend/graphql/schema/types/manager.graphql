@@ -1,0 +1,18 @@
+type Query{
+    manager(id: ID!): Manager!
+}
+
+type Manager{
+    id: ID!
+    nickname: String!
+    session: Session!
+}
+
+type Mutation{
+    createManager(data: CreateManagerInput!): Manager!
+}
+
+input CreateManagerInput{
+    nickname: String!
+    session_id: Int!
+}

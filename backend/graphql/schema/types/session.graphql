@@ -5,6 +5,7 @@ type Query{
 type Session{
     id: Int!
     description: String
+    participants: [Participant]
 }
 
 type Mutation{
