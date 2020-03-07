@@ -1,12 +1,13 @@
 const Query = {
-	participant: (parent, args, ctx) => {
-		return {id: "1", nickname: "mrtkprc", session_number: 5004}
+	participant: (parent, args, { Participant }) => {
+		return Participant.findById(args.id);
 	},
-	session: (parent, args, ctx) => {
-		return {id: 1, description: "Session Query Result"}
+	session: (parent, args, {Session}) => {
+		return Session.findById(args.id);
+
 	},
-	manager: (parent, args, ctx) => {
-		return {id: 1, nickname: "mymanager"}
+	manager: (parent, args, {Manager}) => {
+		return Manager.findById(args.id);
 	}
 };
 

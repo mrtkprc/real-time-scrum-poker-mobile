@@ -1,7 +1,7 @@
 const Session = {
-    participants: (parent, args, { db }) => {
-        return [{id: 1, nickname: "mrtkprc", sessionId: 2},
-            {id: 3, nickname: "ork", sessionId: 4}]
+    participants: (parent, args, { Participant }) => {
+        console.log(parent);
+        return Participant.find({sessionId: parent._id});
     }
 };
 

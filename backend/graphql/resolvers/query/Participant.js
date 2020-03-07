@@ -1,6 +1,6 @@
 const Participant = {
-    session: (parent, args, { db }) => {
-        return {id: 11, description: "Session under Participant", participants: [{id: 1, nickname: "ork"}]}
+    session: (parent, args, { Session }) => {
+        return Session.findById(parent.sessionId);
     }
 };
 

@@ -1,12 +1,12 @@
 type Query{
-    session(id: Int!): Session!
+    session(id: ID!): Session!
 }
 
 type Session{
     id: ID!
     sessionNumber: Int!
     description: String
-    participants: [Participant]
+    participants: [Participant!]!
 }
 
 type Mutation{
