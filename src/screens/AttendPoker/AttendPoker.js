@@ -1,41 +1,61 @@
-import React, {Component} from 'react';
-import { StyleSheet, TouchableOpacity, } from 'react-native';
-import { Container, Content, Item, Input, Thumbnail, Button, Text, View } from 'native-base';
+import React, {useState} from 'react';
+import { StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { Container, Content, Item, Input, Thumbnail, Button, Text, View,  } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { Formik } from 'formik';
 import {useQuery} from '@apollo/react-hooks';
 import {POKEMONS_QUERY} from './queries';
 
 const AttendPoker = () => {
-    const {error, loading, data} = useQuery(POKEMONS_QUERY);
+    //const {error, loading, data} = useQuery(POKEMONS_QUERY);
 
-    if (loading) {
-        return (<View><Text>Loading...</Text></View>);
-    }
+    const handleChange = (e) => {
+        alert(e);
+    };
 
     const uri = "https://facebook.github.io/react-native/docs/assets/favicon.png";
 
     return (
-        <Container style={styles.container}>
-            <Content>
-                <Thumbnail style={styles.logo} large source={{uri: uri}} />
-                <Item style={styles.sessionNumberItem} rounded>
-                    <Input maxLength={6} style={styles.sessionNumberInput} keyboardType='number-pad' placeholder='Session Number'/>
-                </Item>
-                <Item style={styles.fullNameItem} regular>
-                    <Icon style={{marginLeft: 10}} size={48} color='#06E399' active name='user' />
-                    <Input style={styles.fullNameInput} placeholder='Full Name'/>
-                </Item>
-            </Content>
-            <Content>
-                <Button style={styles.createSessionButton} iconLeft success full>
-                    <Icon type="FontAwesome" size={32} color='white' name='user' />
-                    <Text style={styles.createSessionButtonText}>Create Session</Text>
-                </Button>
-            </Content>
-            <TouchableOpacity style={styles.startAPokerButton}>
-                <Text style={{color: 'yellow', fontSize: 18, fontWeight: 'bold'}}>Start A Poker</Text>
-            </TouchableOpacity>
-        </Container>
+        <Formik
+            onSubmit={values => alert(JSON.stringify(values))}
+            initialValues={{ sessionNumber: '', fullName:'MK' }}
+        >
+            {({ handleChange, handleBlur, handleSubmit, values }) => (
+                <Container style={styles.container}>
+                    <Content>
+                        <Thumbnail style={styles.logo} large source={{uri: uri}} />
+                        <Item style={styles.sessionNumberItem} rounded>
+                            <TextInput
+                                name={"sessionNumber"}
+                                value={values.sessionNumber}
+                                onChangeText={handleChange('sessionNumber')}
+                                maxLength={6}
+                                style={styles.sessionNumberInput}
+                                keyboardType='number-pad'
+                                placeholder='Session Number'/>
+                        </Item>
+                        <Item style={styles.fullNameItem} regular>
+                            <Icon style={{marginLeft: 10}} size={48} color='#06E399' active name='user' />
+                            <Input
+                                name={"fullName"}
+                                value={values.fullName}
+                                onChangeText={handleChange('fullName')}
+                                style={styles.fullNameInput}
+                                placeholder='Full Name'/>
+                        </Item>
+                    </Content>
+                    <Content>
+                        <Button onPress={handleSubmit} style={styles.createSessionButton} iconLeft success full>
+                            <Icon type="FontAwesome" size={32} color='white' name='user' />
+                            <Text style={styles.createSessionButtonText}>Create Session</Text>
+                        </Button>
+                    </Content>
+                    <TouchableOpacity style={styles.startAPokerButton}>
+                        <Text style={{color: 'yellow', fontSize: 18, fontWeight: 'bold'}}>Start A Poker</Text>
+                    </TouchableOpacity>
+                </Container>
+            )}
+        </Formik>
     );
 };
 
