@@ -4,7 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 //screens
-import AttendPoker from './screens/AttendPoker'
+import AttendPoker from './screens/AttendPoker/AttendPoker'
 
 const HomeStack = createStackNavigator();
 

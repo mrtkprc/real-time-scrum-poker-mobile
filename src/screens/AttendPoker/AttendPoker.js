@@ -3,23 +3,15 @@ import { StyleSheet, TouchableOpacity, } from 'react-native';
 import { Container, Content, Item, Input, Thumbnail, Button, Text, View } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useQuery} from '@apollo/react-hooks';
-
-import {gql} from 'apollo-boost';
+import {POKEMONS_QUERY} from './queries';
 
 const AttendPoker = () => {
-    const POKEMONS_QUERY = gql`
-        {
-            pokemons(first: 20) {
-                id
-                name
-                image
-            }
-        }
-    `;
     const {error, loading, data} = useQuery(POKEMONS_QUERY);
+
     if (loading) {
         return (<View><Text>Loading...</Text></View>);
     }
+
     const uri = "https://facebook.github.io/react-native/docs/assets/favicon.png";
 
     return (
