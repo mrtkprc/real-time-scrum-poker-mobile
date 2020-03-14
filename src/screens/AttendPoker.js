@@ -1,42 +1,51 @@
 import React, {Component} from 'react';
 import { StyleSheet, TouchableOpacity, } from 'react-native';
-import { Container, Content, Item, Input, Header, Thumbnail, Title, Body, Button, Text } from 'native-base';
+import { Container, Content, Item, Input, Thumbnail, Button, Text, View } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {useQuery} from '@apollo/react-hooks';
 
-class AttendPoker extends Component {
-    state = {};
-    render() {
-        const uri = "https://facebook.github.io/react-native/docs/assets/favicon.png"
-        return (
-            <Container style={styles.container}>
-                <Header style={styles.header}>
-                    <Body>
-                        <Title style={styles.headerTitle}>Real Time Scrum Poker</Title>
-                    </Body>
-                </Header>
-                <Content>
-                    <Thumbnail style={styles.logo} large source={{uri: uri}} />
-                    <Item style={styles.sessionNumberItem} rounded>
-                        <Input maxLength={6} style={styles.sessionNumberInput} keyboardType='number-pad' placeholder='Session Number'/>
-                    </Item>
-                    <Item style={styles.fullNameItem} regular>
-                        <Icon style={{marginLeft: 10}} size={48} color='#06E399' active name='user' />
-                        <Input style={styles.fullNameInput} placeholder='Full Name'/>
-                    </Item>
-                </Content>
-                <Content>
-                    <Button style={styles.createSessionButton} iconLeft success full>
-                        <Icon type="FontAwesome" size={32} color='white' name='user' />
-                        <Text style={styles.createSessionButtonText}>Create Session</Text>
-                    </Button>
-                </Content>
-                <TouchableOpacity style={styles.startAPokerButton}>
-                    <Text style={{color: 'yellow', fontSize: 18, fontWeight: 'bold'}}>Start A Poker</Text>
-                </TouchableOpacity>
-            </Container>
-        );
+import {gql} from 'apollo-boost';
+
+const AttendPoker = () => {
+    const POKEMONS_QUERY = gql`
+        {
+            pokemons(first: 20) {
+                id
+                name
+                image
+            }
+        }
+    `;
+    const {error, loading, data} = useQuery(POKEMONS_QUERY);
+    if (loading) {
+        return (<View><Text>Loading...</Text></View>);
     }
-}
+    const uri = "https://facebook.github.io/react-native/docs/assets/favicon.png";
+
+    return (
+        <Container style={styles.container}>
+            <Content>
+                <Thumbnail style={styles.logo} large source={{uri: uri}} />
+                <Item style={styles.sessionNumberItem} rounded>
+                    <Input maxLength={6} style={styles.sessionNumberInput} keyboardType='number-pad' placeholder='Session Number'/>
+                </Item>
+                <Item style={styles.fullNameItem} regular>
+                    <Icon style={{marginLeft: 10}} size={48} color='#06E399' active name='user' />
+                    <Input style={styles.fullNameInput} placeholder='Full Name'/>
+                </Item>
+            </Content>
+            <Content>
+                <Button style={styles.createSessionButton} iconLeft success full>
+                    <Icon type="FontAwesome" size={32} color='white' name='user' />
+                    <Text style={styles.createSessionButtonText}>Create Session</Text>
+                </Button>
+            </Content>
+            <TouchableOpacity style={styles.startAPokerButton}>
+                <Text style={{color: 'yellow', fontSize: 18, fontWeight: 'bold'}}>Start A Poker</Text>
+            </TouchableOpacity>
+        </Container>
+    );
+};
 
 const styles = StyleSheet.create({
     container:{
