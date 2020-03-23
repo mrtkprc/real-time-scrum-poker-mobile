@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { StyleSheet, TouchableOpacity, TextInput } from 'react-native';
-import { Container, Content, Item, Input, Thumbnail, Button, Text, View,  } from 'native-base';
+import { Container, Content, Item, Input, Thumbnail, Button, Text,  } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Formik } from 'formik';
 import {useQuery} from '@apollo/react-hooks';
@@ -9,16 +9,12 @@ import {POKEMONS_QUERY} from './queries';
 const AttendPoker = () => {
     //const {error, loading, data} = useQuery(POKEMONS_QUERY);
 
-    const handleChange = (e) => {
-        alert(e);
-    };
-
     const uri = "https://facebook.github.io/react-native/docs/assets/favicon.png";
 
     return (
         <Formik
             onSubmit={values => alert(JSON.stringify(values))}
-            initialValues={{ sessionNumber: '', fullName:'MK' }}
+            initialValues={{ sessionNumber: '', fullName:'' }}
         >
             {({ handleChange, handleBlur, handleSubmit, values }) => (
                 <Container style={styles.container}>
