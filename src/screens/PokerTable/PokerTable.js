@@ -81,6 +81,6 @@ const styles = StyleSheet.create({
         justifyContent:'space-around',
         flexDirection: 'row',
         flex: 1,
-        backgroundColor: 'red'
+        backgroundColor: '#03d3fc'
     },
 });
