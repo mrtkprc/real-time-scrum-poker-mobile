@@ -8,17 +8,10 @@ const Card = (props) => {
     return (
         <TouchableOpacity
             onPress={() => handlePress(props.point)}
-            style={[styles.card]}>
-                <ImageBackground
-                    style={[styles.card,{width: '100%', height: '100%'}]}
-                    resizeMode={'stretch'}
-                    source={props.isCardSelected ? require('./../assets/card_back_green.png') : require('./../assets/card_back_red.png')}>
-
-                    <Text style={styles.text}>
-                        {props.point}
-                    </Text>
-
-                </ImageBackground>
+            style={[styles.card, {backgroundColor: props.isCardSelected ? '#9bd1a8': '#feffdb' }]}>
+                <Text style={styles.text}>
+                    {props.point}
+                </Text>
         </TouchableOpacity>
     );
 };
@@ -41,7 +34,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         textAlignVertical:'center',
         backgroundColor: 'black',
-        color: 'white'
+        color: 'white',
+        borderRadius: 24
     }
 });
 
