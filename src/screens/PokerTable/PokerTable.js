@@ -1,53 +1,56 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {View, Text, StyleSheet, Dimensions} from 'react-native';
 import Card from '../../components/Card';
-const PokerTable = (props) => {
-    const cardPointsRow1 = ["0","0.5","1","2"];
-    const cardPointsRow2 = ["3","5","8","13"];
-    const cardPointsRow3 = ["20","40","100","inf"];
-    const cardPointsRow4 = ["Q", "B"];
 
-    const onPress = () => {
-
+export default class PokerTable extends Component {
+    cardPressed = () => {
+        alert('mert');
     };
 
-    return (
-        <View style={styles.container}>
-            <View style={styles.cardArea}>
-                <View style={styles.cardAreaShowingCards}>
-                    <View style={styles.cardShowingAreaBaseRow}>
+    composeCards() {
+        const cards = [];
+        const cardPoints = ["0","0.5","1","2","3","5","8","13","20","40","100","inf","Q", "B"];
+        const ROW_COUNT = 4;
+        const CARD_COUNT_EACH_ROW = 4;
+        let cardsInRow = [];
+        let currentCardIndex;
+        let currentCard;
+        for(let i = 0; i < ROW_COUNT ; i++){
+            cardsInRow = [];
+
+            for (let j = 0; j < CARD_COUNT_EACH_ROW; j++) {
+                currentCardIndex = i * CARD_COUNT_EACH_ROW + j;
+
+                if(currentCardIndex >= cardPoints.length)
+                    break;
+                currentCard = cardPoints[currentCardIndex];
+                cardsInRow.push(<Card onPress={this.cardPressed} key={"SP"+currentCard} point={currentCard}/>);
+            }
+            cards.push(<View key={"CardRow"+i} style={styles.cardShowingAreaBaseRow}>{cardsInRow}</View>)
+        }
+        return cards;
+    };
+    state = {};
+    render() {
+        return (
+            <View style={styles.container}>
+                <View style={styles.cardArea}>
+                    <View style={styles.cardAreaShowingCards}>
                         {
-                            cardPointsRow1.map((item) => <Card onPress={onPress} key={"SP"+item} point={item}/>)
+                            this.composeCards()
                         }
                     </View>
-                    <View style={styles.cardShowingAreaBaseRow}>
-                        {
-                            cardPointsRow2.map((item) => <Card key={"SP"+item} point={item}/>)
-                        }
-                    </View>
-                    <View style={styles.cardShowingAreaBaseRow}>
-                        {
-                            cardPointsRow3.map((item) => <Card key={"SP"+item} point={item}/>)
-                        }
-                    </View>
-                    <View style={styles.cardShowingAreaBaseRow}>
-                        {
-                            cardPointsRow4.map((item) => <Card key={"SP"+item} point={item}/>)
-                        }
+                    <View style={styles.cardAreaSelectedCardStatus}>
+                        <Text>Selected Card Status</Text>
                     </View>
                 </View>
-                <View style={styles.cardAreaSelectedCardStatus}>
-                    <Text>Selected Card Status</Text>
+                <View style={styles.votingStatusArea}>
+                    <Text>Voting Area Status</Text>
                 </View>
-
             </View>
-
-            <View style={styles.votingStatusArea}>
-                <Text>Voting Area Status</Text>
-            </View>
-        </View>
-    );
-};
+        );
+    }
+}
 
 const styles = StyleSheet.create({
     container:{
@@ -78,6 +81,3 @@ const styles = StyleSheet.create({
         backgroundColor: 'red'
     },
 });
-
-export default PokerTable;
-
