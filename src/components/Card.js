@@ -4,14 +4,34 @@ const Card = (props) => {
     const handlePress = (data) => {
         props.cardPressed(data);
     };
-    const image = { uri: "https://reactjs.org/logo-og.png" };
+    let imagePicture = "";
+    switch (props.point) {
+        case "Q":
+            imagePicture = require('./../assets/Q.png');
+            break;
+        case "C":
+            imagePicture = require('./../assets/C.png');
+            break;
+        case "Inf":
+            imagePicture = require('./../assets/Inf.png');
+            break;
+        default:
+            imagePicture = require('./../assets/Q.png');
+            break;
+
+    }
     return (
         <TouchableOpacity
             onPress={() => handlePress(props.point)}
             style={[styles.card, {backgroundColor: props.isCardSelected ? '#9bd1a8': '#feffdb' }]}>
-                <Text style={styles.text}>
-                    {props.point}
-                </Text>
+            {
+                props.isImage
+                ?
+                    <Image source={imagePicture}/>
+                :
+                    <Text style={styles.text}>{props.point}</Text>
+            }
+
         </TouchableOpacity>
     );
 };
@@ -26,7 +46,7 @@ const styles = StyleSheet.create({
         borderColor:'gray'
     },
     text:{
-        fontSize: 20,
+        fontSize: 26,
         fontWeight: 'bold',
         width: 50,
         height: 50,

@@ -13,7 +13,7 @@ export default class PokerTable extends Component {
 
     composeCards() {
         const cards = [];
-        const cardPoints = ["0","0.5","1","2","3","5","8","13","20","40","100","inf","Q", "B"];
+        const cardPoints = ["0","0.5","1","2","3","5","8","13","20","40","100","Inf","Q", "C"];
         const ROW_COUNT = 4;
         const CARD_COUNT_EACH_ROW = 4;
         let cardsInRow = [];
@@ -28,7 +28,14 @@ export default class PokerTable extends Component {
                 if(currentCardIndex >= cardPoints.length)
                     break;
                 currentCard = cardPoints[currentCardIndex];
-                cardsInRow.push(<Card isCardSelected={this.state.selectedCard === currentCard} cardPressed={this.cardPressed} key={"SP"+currentCard} point={currentCard}/>);
+                cardsInRow.push(
+                    <Card
+                        isImage={currentCard === 'Q' || currentCard === 'C' || currentCard === 'Inf'}
+                        isCardSelected={this.state.selectedCard === currentCard}
+                        cardPressed={this.cardPressed}
+                        key={"SP"+currentCard}
+                        point={currentCard}/>
+                );
             }
             cards.push(<View key={"CardRow"+i} style={styles.cardShowingAreaBaseRow}>{cardsInRow}</View>)
         }
