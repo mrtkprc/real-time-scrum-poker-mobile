@@ -3,8 +3,12 @@ import {View, Text, StyleSheet, Dimensions} from 'react-native';
 import Card from '../../components/Card';
 
 export default class PokerTable extends Component {
-    cardPressed = () => {
-        alert('mert');
+    state = {selectedCard: 'Q'};
+
+    cardPressed = (data) => {
+        this.setState({
+            selectedCard: data
+        });
     };
 
     composeCards() {
@@ -24,13 +28,12 @@ export default class PokerTable extends Component {
                 if(currentCardIndex >= cardPoints.length)
                     break;
                 currentCard = cardPoints[currentCardIndex];
-                cardsInRow.push(<Card onPress={this.cardPressed} key={"SP"+currentCard} point={currentCard}/>);
+                cardsInRow.push(<Card isCardSelected={this.state.selectedCard === currentCard} cardPressed={this.cardPressed} key={"SP"+currentCard} point={currentCard}/>);
             }
             cards.push(<View key={"CardRow"+i} style={styles.cardShowingAreaBaseRow}>{cardsInRow}</View>)
         }
         return cards;
     };
-    state = {};
     render() {
         return (
             <View style={styles.container}>

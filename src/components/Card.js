@@ -1,12 +1,19 @@
 import React from 'react';
 import  {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 const Card = (props) => {
+    const handlePress = (data) => {
+        props.cardPressed(data);
+    };
 
     return (
-        <TouchableOpacity onPress={props.onPress} style={[styles.card]}>
-            <Text style={styles.text}>
-                {props.point}
-            </Text>
+        <TouchableOpacity
+            onPress={() => handlePress(props.point)}
+            style={[styles.card,{backgroundColor: props.isCardSelected ? 'green': 'white'}]}>
+
+                <Text style={styles.text}>
+                    {props.point}
+                </Text>
+
         </TouchableOpacity>
 
     );
@@ -14,7 +21,6 @@ const Card = (props) => {
 
 const styles = StyleSheet.create({
     card:{
-        backgroundColor: 'white',
         flex: 1,
         alignItems:'center',
         justifyContent:'center',
