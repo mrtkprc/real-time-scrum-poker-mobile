@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Dimensions} from 'react-native';
+import {View, Text, StyleSheet, FlatList} from 'react-native';
 import Card from '../../components/Card';
+import ListItem from "./ListItem";
 
 export default class PokerTable extends Component {
     state = {selectedCard: 'Q'};
@@ -41,7 +42,9 @@ export default class PokerTable extends Component {
         }
         return cards;
     };
+
     render() {
+        const data = [{id: 1, username:"mrtkprc"},{id: 2, username:"emre"},{id: 3, username:"kaan"},{id: 4, username:"oytun"}];
         return (
             <View style={styles.container}>
                 <View style={styles.cardArea}>
@@ -55,7 +58,11 @@ export default class PokerTable extends Component {
                     </View>
                 </View>
                 <View style={styles.votingStatusArea}>
-                    <Text>Voting Area Status</Text>
+                    <FlatList
+                        data={data}
+                        renderItem={({item}) => <ListItem item={item}/> }
+                        keyExtractor={item => item.id.toString()}
+                    />
                 </View>
             </View>
         );
