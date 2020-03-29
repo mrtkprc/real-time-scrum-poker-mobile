@@ -5,8 +5,18 @@ export const PARTICIPANTS_IN_SESSION_QUERY = gql`
         session(id: $id )
         {
             participants{
+                id
                 nickname
             }
+        }
+    }
+`;
+
+export const NEW_PARTICIPANT_ARRIVED_SUBSCRIPTION = gql`
+    subscription onNewParticipantArrived($sessionId: ID)  {
+        newParticipantArrived(sessionId: $sessionId) {
+            id
+            nickname
         }
     }
 `;

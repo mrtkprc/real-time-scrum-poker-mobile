@@ -1,6 +1,6 @@
-import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
-import {PARTICIPANTS_IN_SESSION_QUERY} from './queries'
+import React, {useState} from 'react';
+import {useQuery, useSubscription} from '@apollo/react-hooks';
+import {PARTICIPANTS_IN_SESSION_QUERY, NEW_PARTICIPANT_ARRIVED_SUBSCRIPTION} from './queries'
 import {ScrollView, Text, View, FlatList} from "react-native";
 import ListItem from "./ListItem";
 
@@ -13,12 +13,29 @@ const ParticipantList = (props) => {
     if (error) return  <ScrollView><Text>{JSON.stringify(error)}</Text></ScrollView>
 
     return (
-        <FlatList
-            data={data.session.participants}
-            renderItem={({item}) => <ListItem item={item}/> }
-            keyExtractor={item => item.nickname}
-        />
+        <>
+            <FlatList
+                data={data.session.participants}
+                renderItem={({item}) => <ListItem item={item}/> }
+                keyExtractor={item => item.id}
+            />
+            <PartArr participantList={data.session.participants}/>
+        </>
     );
+};
+
+const PartArr = (props) => {
+    const { data, loading } = useSubscription(
+        NEW_PARTICIPANT_ARRIVED_SUBSCRIPTION,
+        { variables: { "sessionId": "5e7dfdfdea4ab4384f7b3bf1" } }
+    );
+
+    if(!loading)
+    {
+        props.participantList.push({nickname:"oytun"});
+    }
+
+    return null;
 };
 
 export default ParticipantList;
