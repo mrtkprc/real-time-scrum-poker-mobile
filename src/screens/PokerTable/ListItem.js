@@ -4,7 +4,7 @@ const ListItem = (props) => {
     return (
         <TouchableOpacity style={styles.container}>
             <Text style={styles.name}>
-                {props.item.username}
+                {props.item.nickname}
             </Text>
         </TouchableOpacity>
     );
