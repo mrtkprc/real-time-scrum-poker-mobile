@@ -6,7 +6,7 @@ import ListItem from "./ListItem";
 
 const ParticipantList = (props) => {
     const { loading, error, data } = useQuery(PARTICIPANTS_IN_SESSION_QUERY,{
-        variables: { "id":  "5e7dfdfdea4ab4384f7b3bf1" },
+        variables: { "id":  props.sessionId },
     });
 
     if (loading) return <View><Text>Loading...</Text></View>
@@ -22,16 +22,3 @@ const ParticipantList = (props) => {
 };
 
 export default ParticipantList;
-
-/*
-*                    <Query
-                        variables={}
-                        query={PARTICIPANTS_IN_SESSION_QUERY}>
-                        {({ loading, error, data }) => {
-
-                            return (
-
-                            );
-                        }}
-                    </Query>
-* */

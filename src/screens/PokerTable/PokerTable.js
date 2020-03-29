@@ -27,7 +27,7 @@ export default class PokerTable extends Component {
                     </View>
                 </View>
                 <View style={styles.votingStatusArea}>
-                    <ParticipantList/>
+                    <ParticipantList sessionId={"5e7dfdfdea4ab4384f7b3bf1"}/>
                 </View>
             </View>
         );
@@ -47,12 +47,12 @@ const styles = StyleSheet.create({
         backgroundColor: 'blue',
         flex: 1
     },
-    cardAreaSelectedCardStatus:{
-        flex: 1,
-        backgroundColor: 'magenta'
-    },
     cardAreaShowingCards:{
         flex:4,
         flexDirection: 'column',
+    },
+    cardAreaSelectedCardStatus:{
+        flex: 1,
+        backgroundColor: 'magenta'
     }
 });
