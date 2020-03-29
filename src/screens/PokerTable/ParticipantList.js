@@ -19,7 +19,10 @@ const ParticipantList = (props) => {
                 renderItem={({item}) => <ListItem item={item}/> }
                 keyExtractor={item => item.id}
             />
-            <NewParticipantArrived refetch={refetch} participantList={data.session.participants}/>
+            <NewParticipantArrived
+                sessionId={props.sessionId}
+                refetch={refetch}
+                participantList={data.session.participants}/>
         </>
     );
 };
@@ -27,7 +30,7 @@ const ParticipantList = (props) => {
 const NewParticipantArrived = (props) => {
     const { data, loading } = useSubscription(
         NEW_PARTICIPANT_ARRIVED_SUBSCRIPTION,
-        { variables: { "sessionId": "5e7dfdfdea4ab4384f7b3bf1" } }
+        { variables: { "sessionId": props.sessionId } }
     );
 
     if(!loading)
