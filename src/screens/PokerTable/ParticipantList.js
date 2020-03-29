@@ -5,7 +5,7 @@ import {ScrollView, Text, View, FlatList} from "react-native";
 import ListItem from "./ListItem";
 
 const ParticipantList = (props) => {
-    const { loading, error, data } = useQuery(PARTICIPANTS_IN_SESSION_QUERY,{
+    const { loading, error, data, refetch } = useQuery(PARTICIPANTS_IN_SESSION_QUERY,{
         variables: { "id":  props.sessionId },
     });
 
@@ -19,12 +19,12 @@ const ParticipantList = (props) => {
                 renderItem={({item}) => <ListItem item={item}/> }
                 keyExtractor={item => item.id}
             />
-            <PartArr participantList={data.session.participants}/>
+            <NewParticipantArrived refetch={refetch} participantList={data.session.participants}/>
         </>
     );
 };
 
-const PartArr = (props) => {
+const NewParticipantArrived = (props) => {
     const { data, loading } = useSubscription(
         NEW_PARTICIPANT_ARRIVED_SUBSCRIPTION,
         { variables: { "sessionId": "5e7dfdfdea4ab4384f7b3bf1" } }
@@ -32,7 +32,7 @@ const PartArr = (props) => {
 
     if(!loading)
     {
-        props.participantList.push({nickname:"oytun"});
+        props.refetch();
     }
 
     return null;
