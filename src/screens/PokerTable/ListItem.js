@@ -1,26 +1,49 @@
-import React from 'react';
-import {Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import React, {useState, useEffect, useLayoutEffect} from 'react';
+import {Text, View, Image, StyleSheet, TouchableOpacity} from 'react-native';
+
 const ListItem = (props) => {
+    const oldParticipantColors = {
+        bgColor: {backgroundColor: 'gray'},
+        textColor: {color: 'black'}
+    };
+
+    const newParticipantColors = {
+        bgColor: {backgroundColor: 'green'},
+        textColor: {color: 'white'}
+    };
+
+    const [participantColors, setParticipantColors] = useState(oldParticipantColors);
+
+    const [isNewParticipant, setIsNewParticipant] = useState(props.isNewParticipant);
+
+    if (isNewParticipant) {
+        setParticipantColors(newParticipantColors);
+
+        setIsNewParticipant(false);
+
+        setTimeout(() => {
+            setParticipantColors(oldParticipantColors);
+        }, 1000);
+    }
+
     return (
-        <TouchableOpacity style={styles.container}>
-            <Text style={styles.name}>
+        <View style={[styles.container, participantColors.bgColor]}>
+            <Text style={[styles.name, participantColors.textColor]}>
                 {props.item.nickname}
             </Text>
-        </TouchableOpacity>
-    );
+        </View>
+    )
+
 };
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 10,
+        justifyContent: 'center',
+        height: 40,
+        paddingBottom: 5,
         borderBottomWidth: 1,
         borderColor: '#f1f1f1',
-    },
-    image: {
-        width: 100,
-        height: 100,
     },
     name: {
         fontSize: 24,

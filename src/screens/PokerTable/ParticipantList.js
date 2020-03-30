@@ -1,10 +1,11 @@
-import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
+import React, {useState} from 'react';
+import {useQuery} from '@apollo/react-hooks';
 import {PARTICIPANTS_IN_SESSION_QUERY, NEW_PARTICIPANT_ARRIVED_SUBSCRIPTION} from './queries'
-import { ScrollView, Text, View, FlatList } from "react-native";
+import {ScrollView, Text, View, FlatList} from "react-native";
 import ListItem from "./ListItem";
 
 const ParticipantList = (props) => {
+    const [newParticipantId, setNewParticipantId] = useState("");
     const {loading, error, data, subscribeToMore} = useQuery(PARTICIPANTS_IN_SESSION_QUERY, {
         variables: {"id": props.sessionId},
     });
@@ -21,6 +22,7 @@ const ParticipantList = (props) => {
             if (!subscriptionData.data) return prev;
             const newParticipant = subscriptionData.data.newParticipantArrived;
             if (!prev.session.participants.find((participant) => participant.id === newParticipant.id)) {
+                setNewParticipantId(newParticipant.id);
                 return {
                     ...prev,
                     session: {
@@ -40,7 +42,7 @@ const ParticipantList = (props) => {
     return (
         <FlatList
             data={data.session.participants}
-            renderItem={({item}) => <ListItem item={item}/>}
+            renderItem={({item}) => <ListItem isNewParticipant={item.id.toString() === newParticipantId} item={item}/>}
             keyExtractor={item => item.id}
         />
     );
