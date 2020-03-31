@@ -2,18 +2,18 @@ import React, {useState} from 'react';
 import {StyleSheet, TouchableOpacity, TextInput, View} from 'react-native';
 import {Container, Content, Item, Input, Thumbnail, Button, Text,} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Formik } from 'formik';
-import { useLazyQuery, useMutation} from '@apollo/react-hooks';
-import {FIND_SESSION_BY_NUMBER_QUERY} from './queries';
+import {Formik} from 'formik';
+import {useLazyQuery} from '@apollo/react-hooks';
+import {FIND_SESSION_BY_NUMBER_QUERY, CREATE_PARTICIPANT_MUTATION} from './queries';
 import {useNavigation} from '@react-navigation/native';
 
 const AttendPoker = () => {
     const navigation = useNavigation();
-
     const [getSessionInformation, {loading, data, error}] = useLazyQuery(FIND_SESSION_BY_NUMBER_QUERY);
     const uri = "https://facebook.github.io/react-native/docs/assets/favicon.png";
-
+    let fullName = "";
     const formSubmitted = (values) => {
+        fullName = values.fullName;
         getSessionInformation({variables: {"sessionNumber": parseInt(values.sessionNumber)}});
     };
 
@@ -21,9 +21,10 @@ const AttendPoker = () => {
     if (error) alert("Wrong Session Number");
 
     if (data && data.findSessionBySessionNumber) {
-        navigation.navigate('PokerTable',{
+        navigation.navigate('PokerTable', {
             sessionId: data.findSessionBySessionNumber.id,
-            sessionNumber: data.findSessionBySessionNumber.sessionNumber
+            sessionNumber: data.findSessionBySessionNumber.sessionNumber,
+            fullName: "mrtkprc"
         })
     }
 
