@@ -1,25 +1,41 @@
 import React, {useState} from 'react';
-import { StyleSheet, TouchableOpacity, TextInput } from 'react-native';
-import { Container, Content, Item, Input, Thumbnail, Button, Text,  } from 'native-base';
+import {StyleSheet, TouchableOpacity, TextInput, View} from 'react-native';
+import {Container, Content, Item, Input, Thumbnail, Button, Text,} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Formik } from 'formik';
-import {useQuery} from '@apollo/react-hooks';
-import {POKEMONS_QUERY} from './queries';
+import { useLazyQuery, useMutation} from '@apollo/react-hooks';
+import {FIND_SESSION_BY_NUMBER_QUERY} from './queries';
+import {useNavigation} from '@react-navigation/native';
 
 const AttendPoker = () => {
-    //const {error, loading, data} = useQuery(POKEMONS_QUERY);
+    const navigation = useNavigation();
 
+    const [getSessionInformation, {loading, data, error}] = useLazyQuery(FIND_SESSION_BY_NUMBER_QUERY);
     const uri = "https://facebook.github.io/react-native/docs/assets/favicon.png";
+
+    const formSubmitted = (values) => {
+        getSessionInformation({variables: {"sessionNumber": parseInt(values.sessionNumber)}});
+    };
+
+    if (loading) return <View><Text>Loading</Text></View>;
+    if (error) alert("Wrong Session Number");
+
+    if (data && data.findSessionBySessionNumber) {
+        navigation.navigate('PokerTable',{
+            sessionId: data.findSessionBySessionNumber.id,
+            sessionNumber: data.findSessionBySessionNumber.sessionNumber
+        })
+    }
 
     return (
         <Formik
-            onSubmit={values => alert(JSON.stringify(values))}
-            initialValues={{ sessionNumber: '', fullName:'' }}
+            onSubmit={formSubmitted}
+            initialValues={{sessionNumber: '', fullName: ''}}
         >
-            {({ handleChange, handleBlur, handleSubmit, values }) => (
+            {({handleChange, handleBlur, handleSubmit, values}) => (
                 <Container style={styles.container}>
                     <Content>
-                        <Thumbnail style={styles.logo} large source={{uri: uri}} />
+                        <Thumbnail style={styles.logo} large source={{uri: uri}}/>
                         <Item style={styles.sessionNumberItem} rounded>
                             <TextInput
                                 name={"sessionNumber"}
@@ -31,7 +47,7 @@ const AttendPoker = () => {
                                 placeholder='Session Number'/>
                         </Item>
                         <Item style={styles.fullNameItem} regular>
-                            <Icon style={{marginLeft: 10}} size={48} color='#06E399' active name='user' />
+                            <Icon style={{marginLeft: 10}} size={48} color='#06E399' active name='user'/>
                             <Input
                                 name={"fullName"}
                                 value={values.fullName}
@@ -42,7 +58,7 @@ const AttendPoker = () => {
                     </Content>
                     <Content>
                         <Button onPress={handleSubmit} style={styles.createSessionButton} iconLeft success full>
-                            <Icon type="FontAwesome" size={32} color='white' name='user' />
+                            <Icon type="FontAwesome" size={32} color='white' name='user'/>
                             <Text style={styles.createSessionButtonText}>Create Session</Text>
                         </Button>
                     </Content>
@@ -56,14 +72,14 @@ const AttendPoker = () => {
 };
 
 const styles = StyleSheet.create({
-    container:{
+    container: {
         display: 'flex',
         flexDirection: 'column'
     },
-    header:{
+    header: {
         backgroundColor: "#06BEE3",
     },
-    headerTitle:{
+    headerTitle: {
         marginLeft: 'auto',
         marginRight: 'auto',
     },
@@ -72,17 +88,17 @@ const styles = StyleSheet.create({
         marginLeft: 'auto',
         marginRight: 'auto',
     },
-    sessionNumberItem:{
+    sessionNumberItem: {
         marginTop: 15,
         marginLeft: 'auto',
         marginRight: 'auto',
         width: '60%'
     },
-    sessionNumberInput:{
+    sessionNumberInput: {
         textAlign: 'center',
         fontSize: 24,
     },
-    fullNameItem:{
+    fullNameItem: {
         marginTop: 30,
         marginLeft: 'auto',
         marginRight: 'auto',
@@ -90,22 +106,22 @@ const styles = StyleSheet.create({
         borderColor: '#06BEE3',
         borderWidth: 3
     },
-    fullNameInput:{
+    fullNameInput: {
         textAlign: 'center',
         fontSize: 24,
         marginLeft: -40
     },
-    createSessionButton:{
+    createSessionButton: {
         width: '80%',
         marginLeft: 'auto',
         marginRight: 'auto',
         color: '#06BEE3',
         marginBottom: 10
     },
-    createSessionButtonText:{
+    createSessionButtonText: {
         fontSize: 22,
     },
-    startAPokerButton:{
+    startAPokerButton: {
         justifyContent: 'flex-end',
         alignItems: 'center',
         width: '100%',

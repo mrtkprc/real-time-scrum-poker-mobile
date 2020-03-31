@@ -21,8 +21,8 @@ export default function App() {
                 },
             }}>
             <HomeStack.Navigator>
-                <HomeStack.Screen name="PokerTable" component={PokerTable} />
                 <HomeStack.Screen name="AttendPoker" component={AttendPoker} />
+                <HomeStack.Screen name="PokerTable" component={PokerTable} />
             </HomeStack.Navigator>
         </NavigationContainer>
     );

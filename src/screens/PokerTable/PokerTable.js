@@ -13,7 +13,7 @@ export default class PokerTable extends Component {
     };
 
     render() {
-
+        const {sessionId} = this.props.route.params;
         return (
             <View style={styles.container}>
                 <View style={styles.cardArea}>
@@ -27,7 +27,7 @@ export default class PokerTable extends Component {
                     </View>
                 </View>
                 <View style={styles.votingStatusArea}>
-                    <ParticipantList sessionId={"5e7dfdfdea4ab4384f7b3bf1"}/>
+                    <ParticipantList sessionId={sessionId}/>
                 </View>
             </View>
         );
