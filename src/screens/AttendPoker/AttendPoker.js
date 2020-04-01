@@ -6,7 +6,6 @@ import {Formik} from 'formik';
 import {useLazyQuery, useMutation} from '@apollo/react-hooks';
 import {FIND_SESSION_BY_NUMBER_QUERY, CREATE_PARTICIPANT_MUTATION} from './queries';
 import {useNavigation} from '@react-navigation/native';
-import {sub} from "react-native-reanimated";
 
 const AttendPoker = () => {
     const [submittedValues, setSubmittedValues] = useState({});
@@ -15,15 +14,9 @@ const AttendPoker = () => {
     const navigation = useNavigation();
     const uri = "https://facebook.github.io/react-native/docs/assets/favicon.png";
     const formSubmitted = (values) => {
-        if(!called)
-        {
-            setSubmittedValues(values);
-            getSessionInformation({variables: {sessionNumber: parseInt(values.sessionNumber)}});
-        }
+        setSubmittedValues(values);
+        getSessionInformation({variables: {sessionNumber: parseInt(values.sessionNumber)}});
     };
-
-    if (loading) return <View><Text>Loading</Text></View>;
-    if (error) alert("Wrong Session Number");
 
     if (data && data.findSessionBySessionNumber) {
         if(!addParticipantData.called)
@@ -47,8 +40,10 @@ const AttendPoker = () => {
         >
             {({handleChange, handleBlur, handleSubmit, values}) => (
                 <>
-                { addParticipantData.loading && <View><Text>Mutation Loading</Text></View>}
-                { addParticipantData.error && <View><Text>Mutation Error</Text></View>}
+                { loading && <View><Text>Loading</Text></View>}
+                { error && <View><Text>Error</Text></View>}
+                { addParticipantData.loading && <View><Text>Forwarding to PokerTable....</Text></View>}
+                { addParticipantData.error && <View><Text>Adding User to session failed.</Text></View>}
                 <Container style={styles.container}>
                     <Content>
                         <Thumbnail style={styles.logo} large source={{uri: uri}}/>
