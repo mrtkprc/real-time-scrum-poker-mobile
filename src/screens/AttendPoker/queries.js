@@ -9,3 +9,14 @@ export const FIND_SESSION_BY_NUMBER_QUERY = gql`
         }
     }
 `;
+export const CREATE_PARTICIPANT_MUTATION = gql`
+    mutation createParticipant($nickname: String!, $sessionNumber: Int! ) {
+        createParticipant(
+            data: { nickname: $nickname,
+                sessionNumber: $sessionNumber })
+        {
+            id
+            nickname
+        }
+    }
+`;
