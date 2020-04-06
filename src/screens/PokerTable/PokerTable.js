@@ -4,7 +4,7 @@ import CardDeck from "./CardDeck";
 import ParticipantList from "./ParticipantList";
 
 export default class PokerTable extends Component {
-    state = {selectedCard: 'Q'};
+    state = {selectedCard: 'none'};
 
     cardPressed = (data) => {
         this.setState({
@@ -13,7 +13,7 @@ export default class PokerTable extends Component {
     };
 
     render() {
-        const {sessionId} = this.props.route.params;
+        const { sessionId } = this.props.route.params;
         return (
             <View style={styles.container}>
                 <View style={styles.cardArea}>
