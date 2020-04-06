@@ -24,6 +24,7 @@ const CardDeck = (props) => {
             cardsInRow.push(
                 <Card
                     isImage={currentCard === 'Q' || currentCard === 'C' || currentCard === 'Inf'}
+                    isVotingCompleted={props.isVotingCompleted}
                     isCardSelected={props.selectedCard === currentCard}
                     cardPressed={props.cardPressed}
                     key={"SP"+currentCard}

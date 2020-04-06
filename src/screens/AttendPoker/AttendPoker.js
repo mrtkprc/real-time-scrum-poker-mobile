@@ -25,6 +25,7 @@ const AttendPoker = () => {
                 .then(addedParticipantData => {
                     navigation.navigate('PokerTable', {
                         sessionId: data.findSessionBySessionNumber.id,
+                        participantId: addedParticipantData.data.createParticipant.id,
                         sessionNumber: data.findSessionBySessionNumber.sessionNumber,
                     });
                 })
@@ -36,7 +37,7 @@ const AttendPoker = () => {
     return (
         <Formik
             onSubmit={formSubmitted}
-            initialValues={{sessionNumber: '', fullName: ''}}
+            initialValues={{sessionNumber: '123456', fullName: 'ork'}}
         >
             {({handleChange, handleBlur, handleSubmit, values}) => (
                 <>

@@ -1,5 +1,5 @@
 import React from 'react';
-import  {View, Text, StyleSheet, TouchableOpacity, ImageBackground, Image} from 'react-native';
+import  { Text, StyleSheet, TouchableOpacity, ImageBackground, Image} from 'react-native';
 const Card = (props) => {
     const handlePress = (data) => {
         props.cardPressed(data);
@@ -20,10 +20,13 @@ const Card = (props) => {
             break;
 
     }
+
+    const cardBgColor = props.isCardSelected ? !props.isVotingCompleted ? '#9bd1a8'  : '#2d7800' : '#feffdb';
+
     return (
         <TouchableOpacity
             onPress={() => handlePress(props.point)}
-            style={[styles.card, {backgroundColor: props.isCardSelected ? '#9bd1a8': '#feffdb' }]}>
+            style={[styles.card, {backgroundColor: cardBgColor }]}>
             {
                 props.isImage
                 ?

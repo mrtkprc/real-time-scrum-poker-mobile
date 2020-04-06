@@ -1,22 +1,34 @@
 import React, { useState } from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+import {useMutation} from '@apollo/react-hooks';
+import {ADD_VOTE_MUTATION} from './queries'
 import CardDeck from "./CardDeck";
 import ParticipantList from "./ParticipantList";
 
 const PokerTable = (props) => {
     const [selectedCard, setSelectedCard] = useState('none');
+    const [isVotingCompleted, setIsVotingCompleted] = useState(false);
+    const [addVote] = useMutation(ADD_VOTE_MUTATION);
+    const { sessionId, participantId } = props.route.params;
 
-    const cardPressed = (data) => {
-        setSelectedCard(data);
+    const cardPressed = (vote) => {
+        setIsVotingCompleted(false);
+        setSelectedCard(vote);
+        addVote({variables:{vote, sessionId, participantId}})
+            .then((data) => {
+                setIsVotingCompleted(true);
+            });
     };
 
-    const { sessionId } = props.route.params;
 
     return (
         <View style={styles.container}>
             <View style={styles.cardArea}>
                 <View style={styles.cardAreaShowingCards}>
                     <CardDeck
+                        isVotingCompleted={isVotingCompleted}
+                        sessionId={sessionId}
+                        participantId={participantId}
                         cardPressed={cardPressed}
                         selectedCard={selectedCard}/>
                 </View>
@@ -25,7 +37,9 @@ const PokerTable = (props) => {
                 </View>
             </View>
             <View style={styles.votingStatusArea}>
-                <ParticipantList sessionId={sessionId}/>
+                <ParticipantList
+                    participantId={participantId}
+                    sessionId={sessionId}/>
             </View>
         </View>
     );

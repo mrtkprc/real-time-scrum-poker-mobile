@@ -35,4 +35,13 @@ export const VOTE_GIVEN_SUBSCRIPTION = gql `
     }
 `;
 
+export const ADD_VOTE_MUTATION = gql`
+    mutation addVote($vote: String!, $sessionId: ID!, $participantId: ID! ) {
+        addVote(data: {vote: $vote, sessionId: $sessionId, participantId: $participantId })
+        {
+            id
+            vote
+        }
+    }
+`;
 
