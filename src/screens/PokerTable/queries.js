@@ -7,6 +7,9 @@ export const PARTICIPANTS_IN_SESSION_QUERY = gql`
             participants{
                 id
                 nickname
+                vote{
+                    isGiven
+                }
             }
         }
     }
@@ -17,6 +20,17 @@ export const NEW_PARTICIPANT_ARRIVED_SUBSCRIPTION = gql`
         newParticipantArrived(sessionId: $sessionId) {
             id
             nickname
+        }
+    }
+`;
+
+export const VOTE_GIVEN_SUBSCRIPTION = gql `
+    subscription onVoteGiven($sessionId: ID){
+        voteGiven(sessionId: $sessionId) {
+            isGiven
+            participant{
+                id
+            }
         }
     }
 `;

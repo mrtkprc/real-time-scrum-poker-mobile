@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useLayoutEffect} from 'react';
-import {Text, View, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import React, { useState } from 'react';
+import { Text, View, StyleSheet } from 'react-native';
 
 const ListItem = (props) => {
     const oldParticipantColors = {
@@ -25,11 +25,14 @@ const ListItem = (props) => {
             setParticipantColors(oldParticipantColors);
         }, 1000);
     }
-
+    const { nickname, vote } = props.item;
     return (
         <View style={[styles.container, participantColors.bgColor]}>
             <Text style={[styles.name, participantColors.textColor]}>
-                {props.item.nickname}
+                {nickname}
+            </Text>
+            <Text style={styles.voteStatus}>
+                {vote && vote.isGiven === 1 ? "Yes" : "No"}
             </Text>
         </View>
     )
@@ -39,15 +42,24 @@ const ListItem = (props) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
         height: 40,
-        paddingBottom: 5,
         borderBottomWidth: 1,
         borderColor: '#f1f1f1',
     },
     name: {
+        flex: 3,
         fontSize: 24,
         marginLeft: 15,
     },
+    voteStatus: {
+        flex: 1,
+        fontSize: 24,
+        marginRight: 10,
+        textAlign: 'right',
+    }
+
 });
 export default ListItem;
