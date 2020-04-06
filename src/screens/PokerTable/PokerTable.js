@@ -1,38 +1,35 @@
-import React, {Component} from 'react';
+import React, { useState } from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import CardDeck from "./CardDeck";
 import ParticipantList from "./ParticipantList";
 
-export default class PokerTable extends Component {
-    state = {selectedCard: 'none'};
+const PokerTable = (props) => {
+    const [selectedCard, setSelectedCard] = useState('none');
 
-    cardPressed = (data) => {
-        this.setState({
-            selectedCard: data
-        });
+    const cardPressed = (data) => {
+        setSelectedCard(data);
     };
 
-    render() {
-        const { sessionId } = this.props.route.params;
-        return (
-            <View style={styles.container}>
-                <View style={styles.cardArea}>
-                    <View style={styles.cardAreaShowingCards}>
-                        <CardDeck
-                            cardPressed={this.cardPressed}
-                            selectedCard={this.state.selectedCard}/>
-                    </View>
-                    <View style={styles.cardAreaSelectedCardStatus}>
-                        <Text>Selected Card Status</Text>
-                    </View>
+    const { sessionId } = props.route.params;
+
+    return (
+        <View style={styles.container}>
+            <View style={styles.cardArea}>
+                <View style={styles.cardAreaShowingCards}>
+                    <CardDeck
+                        cardPressed={cardPressed}
+                        selectedCard={selectedCard}/>
                 </View>
-                <View style={styles.votingStatusArea}>
-                    <ParticipantList sessionId={sessionId}/>
+                <View style={styles.cardAreaSelectedCardStatus}>
+                    <Text>Selected Card Status</Text>
                 </View>
             </View>
-        );
-    }
-}
+            <View style={styles.votingStatusArea}>
+                <ParticipantList sessionId={sessionId}/>
+            </View>
+        </View>
+    );
+};
 
 const styles = StyleSheet.create({
     container:{
@@ -56,3 +53,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'magenta'
     }
 });
+
+
+export default PokerTable;
