@@ -6,6 +6,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 //screens
 import AttendPoker from './screens/AttendPoker/AttendPoker'
 import PokerTable from './screens/PokerTable/PokerTable';
+import StartPoker from "./screens/StartPoker/StartPoker";
 
 const HomeStack = createStackNavigator();
 
@@ -24,6 +25,9 @@ export default function App() {
                 <HomeStack.Screen
                     name="AttendPoker"
                     component={AttendPoker} />
+                <HomeStack.Screen
+                    name="StartPoker"
+                    component={StartPoker} />
                 <HomeStack.Screen
                     name="PokerTable"
                     component={PokerTable}
