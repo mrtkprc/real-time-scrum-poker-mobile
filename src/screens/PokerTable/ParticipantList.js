@@ -18,8 +18,7 @@ const ParticipantList = (props) => {
     if (loading) return <View><Text>Loading...</Text></View>;
     if (error) return <ScrollView><Text>{JSON.stringify(error)}</Text></ScrollView>;
 
-    if(!isSubscriptionAdjusted)
-    {
+    if(!isSubscriptionAdjusted){
         subscribeToMore({
             document: NEW_PARTICIPANT_ARRIVED_SUBSCRIPTION,
             variables: {

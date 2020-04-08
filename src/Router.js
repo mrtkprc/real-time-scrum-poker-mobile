@@ -23,11 +23,11 @@ export default function App() {
             }}>
             <HomeStack.Navigator>
                 <HomeStack.Screen
-                    name="AttendPoker"
-                    component={AttendPoker} />
-                <HomeStack.Screen
                     name="StartPoker"
                     component={StartPoker} />
+                <HomeStack.Screen
+                    name="AttendPoker"
+                    component={AttendPoker} />
                 <HomeStack.Screen
                     name="PokerTable"
                     component={PokerTable}
