@@ -13,13 +13,13 @@ import {name as appName} from './app.json';
 
 //uri: 'http://192.168.1.27:4000/graphql',
 const httpLink = new HttpLink({
-    uri: 'http://rt-scrum-poker-server.herokuapp.com/graphql',
+    uri: 'https://rt-scrum-poker-server.herokuapp.com/graphql',
 });
 
 // Create a WebSocket link:
 //uri: 'ws://192.168.1.27:4000/graphql',
 const wsLink = new WebSocketLink({
-    uri: 'ws://rt-scrum-poker-server.herokuapp.com/graphql',
+    uri: 'wss://rt-scrum-poker-server.herokuapp.com/graphql',
     options: {
         reconnect: true
     }
