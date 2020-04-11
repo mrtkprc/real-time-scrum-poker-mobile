@@ -1,15 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, TextInput, TouchableOpacity, TouchableHighlight, Image, Clipboard } from "react-native";
-import { Button, Icon } from "native-base";
+import React, { useState } from 'react';
+import { View, StyleSheet, Text, TextInput, TouchableOpacity, Image, Clipboard } from "react-native";
+import { Button } from "native-base";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import Toast from 'react-native-root-toast';
-
+import {CREATE_SCRUM_MASTER_WITH_SESSION_MUTATION} from './queries'
+import {useMutation} from "@apollo/react-hooks";
+import {useNavigation} from '@react-navigation/native';
 const StartPoker = (props) => {
     const generateRandomSessionNumber = () => {
         return String(Math.floor(100000 + Math.random() * 900000));
     };
     const [sessionNumber, setSesionNumber] = useState(generateRandomSessionNumber());
     const [description, setDescription] = useState("");
+    const [ createSessionMutation, { loading: createSessionMutationLoading, error: createSessionMutationError }] = useMutation(CREATE_SCRUM_MASTER_WITH_SESSION_MUTATION);
+
+    const navigation = useNavigation();
 
     const copySessionNumber = async () => {
         await Clipboard.setString(sessionNumber);
@@ -25,11 +30,24 @@ const StartPoker = (props) => {
     };
 
     const createSession = () => {
+        createSessionMutation({variables:{sessionNumber: parseInt(sessionNumber), description}})
+            .then(({data:{createScrumMasterWithSession}}) => {
+                navigation.navigate('PokerTable', {
+                    sessionId: createScrumMasterWithSession.session.id,
+                    participantId: createScrumMasterWithSession.id,
+                    sessionNumber: createScrumMasterWithSession.session.sessionNumber,
+                });
+            })
+            .catch((error)=> {
+            setSesionNumber(generateRandomSessionNumber());
+        });
 
     };
 
     return (
         <KeyboardAwareScrollView style={styles.container}>
+            {createSessionMutationLoading && <Text>Loading...</Text>}
+            {createSessionMutationError && <Text>Error :( Please try again</Text>}
             <View style={styles.layoutContainer}>
                 <Image
                     style={styles.logo}
