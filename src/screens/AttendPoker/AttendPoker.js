@@ -33,6 +33,10 @@ const AttendPoker = () => {
         }
     }
 
+    const startPokerPressed = () => {
+        navigation.navigate('StartPoker');
+    };
+
     //TODO:MK - addParticipantData.loading&error will be modified for more well UI.
     return (
         <Formik
@@ -74,7 +78,7 @@ const AttendPoker = () => {
                             <Text style={styles.createSessionButtonText}>Create Session</Text>
                         </Button>
                     </Content>
-                    <TouchableOpacity style={styles.startAPokerButton}>
+                    <TouchableOpacity onPress={startPokerPressed} style={styles.startAPokerButton}>
                         <Text style={{color: 'yellow', fontSize: 18, fontWeight: 'bold'}}>Start A Poker</Text>
                     </TouchableOpacity>
                 </Container>

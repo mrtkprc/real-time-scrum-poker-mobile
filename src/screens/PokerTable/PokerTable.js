@@ -18,7 +18,6 @@ const PokerTable = (props) => {
         setSelectedCard(vote);
         addVote({variables:{vote, sessionId, participantId}})
             .then((data) => {
-                console.log(data);
                 setIsVotingCompleted(true);
                 setIsVotingStarted(false);
             })
