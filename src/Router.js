@@ -24,6 +24,7 @@ export default function App() {
             <HomeStack.Navigator>
                 <HomeStack.Screen
                     name="AttendPoker"
+                    options={{title: "Real Time Scrum Poker"}}
                     component={AttendPoker} />
                 <HomeStack.Screen
                     name="StartPoker"
@@ -32,6 +33,7 @@ export default function App() {
                     name="PokerTable"
                     component={PokerTable}
                     options={({route}) => ({
+                        title:`Session: ${route.params.sessionNumber}`,
                         headerLeft: null
                     })} />
             </HomeStack.Navigator>
