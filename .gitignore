@@ -103,10 +103,6 @@ dist
 # TernJS port file
 .tern-port
 
-android
-
-ios
-
 __tests__
 
 backend/node_modules
