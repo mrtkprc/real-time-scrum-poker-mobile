@@ -40,7 +40,7 @@ const AttendPoker = () => {
         >
             {({handleChange, handleBlur, handleSubmit, values}) => (
                 <>
-                { loading && <Loading text="Loading" />}
+                { loading && <Loading text="Loading Poker Table" />}
                 { error && <View><Text>Error</Text></View>}
                 <Container style={styles.container}>
                     <Content>

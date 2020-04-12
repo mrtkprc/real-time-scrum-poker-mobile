@@ -79,7 +79,7 @@ const ParticipantList = (props) => {
 
     }
 
-    if(loading) return <Loading text="Loading Participant Lists" />
+    if(loading) return <Loading text="Loading Participant List" />
     if(error) return <Error text={String(error)} />
 
     return (

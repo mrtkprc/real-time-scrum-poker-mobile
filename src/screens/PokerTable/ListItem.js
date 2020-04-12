@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 
 const ListItem = (props) => {
     const oldParticipantColors = {
@@ -27,14 +28,14 @@ const ListItem = (props) => {
     }
     const { nickname, vote } = props.item;
     return (
-        <View style={[styles.container, participantColors.bgColor]}>
+        <LinearGradient colors={['#cfd9df', '#e2ebf0']} style={[styles.container, participantColors.bgColor]}>
             <Text style={[styles.name, participantColors.textColor]}>
                 {nickname}
             </Text>
             <Text style={styles.voteStatus}>
                 {vote && vote.isGiven === 1 ? "Yes" : "No"}
             </Text>
-        </View>
+        </LinearGradient>
     )
 
 };
@@ -47,7 +48,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 40,
         borderBottomWidth: 1,
-        borderColor: '#f1f1f1',
+        borderColor: '#424141',
     },
     name: {
         flex: 3,

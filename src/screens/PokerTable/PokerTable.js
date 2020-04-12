@@ -4,6 +4,7 @@ import {useMutation} from '@apollo/react-hooks';
 import {ADD_VOTE_MUTATION} from './queries'
 import CardDeck from "./CardDeck";
 import ParticipantList from "./ParticipantList";
+import LinearGradient from 'react-native-linear-gradient';
 
 const PokerTable = (props) => {
     const [selectedCard, setSelectedCard] = useState('none');
@@ -44,11 +45,11 @@ const PokerTable = (props) => {
                     <Text>Selected Card Status</Text>
                 </View>
             </View>
-            <View style={styles.votingStatusArea}>
+            <LinearGradient colors={['#4facfe', '#00f2fe']} style={styles.votingStatusArea}>
                 <ParticipantList
                     participantId={participantId}
                     sessionId={sessionId}/>
-            </View>
+            </LinearGradient>
         </View>
     );
 };
@@ -63,7 +64,6 @@ const styles = StyleSheet.create({
         flex:3
     },
     votingStatusArea:{
-        backgroundColor: 'blue',
         flex: 1
     },
     cardAreaShowingCards:{
