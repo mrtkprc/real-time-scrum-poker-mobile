@@ -46,9 +46,14 @@ const PokerTable = (props) => {
                 </View>
             </View>
             <LinearGradient colors={['#4facfe', '#00f2fe']} style={styles.votingStatusArea}>
-                <ParticipantList
-                    participantId={participantId}
-                    sessionId={sessionId}/>
+                <View style={styles.participantListArea}>
+                    <ParticipantList
+                        participantId={participantId}
+                        sessionId={sessionId}/>
+                </View>
+                <View style={styles.actionList}>
+                    <Text>Mert</Text>
+                </View>
             </LinearGradient>
         </View>
     );
@@ -64,7 +69,15 @@ const styles = StyleSheet.create({
         flex:3
     },
     votingStatusArea:{
-        flex: 1
+        flex: 1,
+        flexDirection: 'row'
+    },
+    participantListArea:{
+        flex: 3,
+        flexDirection: 'column'
+    },
+    actionList:{
+        flex:2,
     },
     cardAreaShowingCards:{
         flex:4,
@@ -73,7 +86,7 @@ const styles = StyleSheet.create({
     cardAreaSelectedCardStatus:{
         flex: 1,
         backgroundColor: 'magenta'
-    }
+    },
 });
 
 

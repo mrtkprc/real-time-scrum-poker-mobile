@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, StyleSheet, View, Image } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 const ListItem = (props) => {
     const oldParticipantColors = {
-        bgColor: {backgroundColor: 'gray'},
-        textColor: {color: 'black'}
+        textColor: {color: '#423f3f'},
+        bgColors: ['#cfd9df', '#e2ebf0']
     };
 
     const newParticipantColors = {
-        bgColor: {backgroundColor: 'green'},
-        textColor: {color: 'white'}
+        textColor: {color: '#a30909'},
+        bgColors: ['#43e97b', '#38f9d7']
     };
 
     const [participantColors, setParticipantColors] = useState(oldParticipantColors);
@@ -28,13 +28,18 @@ const ListItem = (props) => {
     }
     const { nickname, vote } = props.item;
     return (
-        <LinearGradient colors={['#cfd9df', '#e2ebf0']} style={[styles.container, participantColors.bgColor]}>
+        <LinearGradient colors={participantColors.bgColors} style={[styles.container]}>
             <Text style={[styles.name, participantColors.textColor]}>
                 {nickname}
             </Text>
-            <Text style={styles.voteStatus}>
-                {vote && vote.isGiven === 1 ? "Yes" : "No"}
-            </Text>
+            <View style={styles.voteStatus}>
+                {vote && vote.isGiven && vote.isGiven === 1
+                    ?
+                        <Image style={styles.voteStatus} source={require('./../../assets/up_vote.png')} />
+                    :
+                        <></>
+                }
+            </View>
         </LinearGradient>
     )
 
@@ -51,16 +56,13 @@ const styles = StyleSheet.create({
         borderColor: '#424141',
     },
     name: {
-        flex: 3,
-        fontSize: 24,
-        marginLeft: 15,
-    },
-    voteStatus: {
         flex: 1,
-        fontSize: 24,
-        marginRight: 10,
-        textAlign: 'right',
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginLeft: 5,
+    },
+    voteStatus:{
+        justifyContent: 'flex-end'
     }
-
 });
 export default ListItem;

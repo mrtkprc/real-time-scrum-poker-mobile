@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     loadingText: {
         fontFamily: 'Tahoma, Verdana, Arial, Sans',
         fontWeight: 'bold',
-        fontSize: 22,
+        fontSize: 20,
         marginLeft: 10,
     }
 })

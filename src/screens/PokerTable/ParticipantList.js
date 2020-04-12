@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { PARTICIPANTS_IN_SESSION_QUERY, NEW_PARTICIPANT_ARRIVED_SUBSCRIPTION, VOTE_GIVEN_SUBSCRIPTION } from './queries'
-import { ScrollView, Text, View, FlatList} from "react-native";
+import { View, FlatList, StyleSheet} from "react-native";
 import ListItem from "./ListItem";
 import { useForceUpdate } from "../../helpers/general";
 import Loading from "../../components/Loading";
 import Error from "../../components/Error";
+import PercentageBar from "../../components/PercentageBar";
 
 
 const ParticipantList = (props) => {
@@ -79,18 +80,34 @@ const ParticipantList = (props) => {
 
     }
 
-    if(loading) return <Loading text="Loading Participant List" />
+    if(loading) return <Loading text="Loading..." />
     if(error) return <Error text={String(error)} />
 
     return (
-        <>
+        <View style={styles.container}>
+            <View style={styles.percentageArea}>
+                <PercentageBar/>
+            </View>
             <FlatList
                 data={data.session.participants}
                 renderItem={({item}) => <ListItem isNewParticipant={item.id.toString() === newParticipantId} item={item}/>}
                 keyExtractor={item => item.id}
             />
-        </>
+        </View>
     );
 };
+
+const styles = StyleSheet.create({
+   container:{
+       flex: 1,
+       flexDirection:'column',
+   },
+   percentageArea:{
+       display: 'flex',
+       height: 30,
+       justifyContent: 'center',
+       marginBottom: 3
+    }
+});
 
 export default ParticipantList;
