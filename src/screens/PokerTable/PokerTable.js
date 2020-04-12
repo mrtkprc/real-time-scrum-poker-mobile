@@ -5,9 +5,11 @@ import {ADD_VOTE_MUTATION} from './queries'
 import CardDeck from "./CardDeck";
 import ParticipantList from "./ParticipantList";
 import LinearGradient from 'react-native-linear-gradient';
+import { Fab, Icon } from 'native-base';
 
 const PokerTable = (props) => {
     const [selectedCard, setSelectedCard] = useState('none');
+    const [isFabActive, setIsFabActive] = useState(false);
     const [isVotingCompleted, setIsVotingCompleted] = useState(false);
     const [isVotingStarted, setIsVotingStarted ] = useState(false);
     const [addVote] = useMutation(ADD_VOTE_MUTATION);
@@ -25,37 +27,44 @@ const PokerTable = (props) => {
             .catch((error) => {
                 setIsVotingStarted(false);
             });
-
     };
 
 
     return (
-        <View style={styles.container}>
-            <View style={styles.cardArea}>
-                <View style={styles.cardAreaShowingCards}>
-                    <CardDeck
-                        isVotingStarted={isVotingStarted}
-                        isVotingCompleted={isVotingCompleted}
-                        sessionId={sessionId}
-                        participantId={participantId}
-                        cardPressed={cardPressed}
-                        selectedCard={selectedCard}/>
+        <>
+            <Fab
+                active={isFabActive}
+                onPress={() => setIsFabActive(!isFabActive)}
+                direction="up"
+                containerStyle={{marginRight: 40}}
+                style={{marginRight: 40}}
+                position="bottomRight">
+                <Icon name="settings" />
+            </Fab>
+            <View style={styles.container}>
+                <View style={styles.cardArea}>
+                    <View style={styles.cardAreaShowingCards}>
+                        <CardDeck
+                            isVotingStarted={isVotingStarted}
+                            isVotingCompleted={isVotingCompleted}
+                            sessionId={sessionId}
+                            participantId={participantId}
+                            cardPressed={cardPressed}
+                            selectedCard={selectedCard}/>
+                    </View>
+                    <View style={styles.cardAreaSelectedCardStatus}>
+                        <Text>Selected Card Status</Text>
+                    </View>
                 </View>
-                <View style={styles.cardAreaSelectedCardStatus}>
-                    <Text>Selected Card Status</Text>
-                </View>
+                <LinearGradient colors={['#4facfe', '#00f2fe']} style={styles.votingStatusArea}>
+                    <View style={styles.participantListArea}>
+                        <ParticipantList
+                            participantId={participantId}
+                            sessionId={sessionId}/>
+                    </View>
+                </LinearGradient>
             </View>
-            <LinearGradient colors={['#4facfe', '#00f2fe']} style={styles.votingStatusArea}>
-                <View style={styles.participantListArea}>
-                    <ParticipantList
-                        participantId={participantId}
-                        sessionId={sessionId}/>
-                </View>
-                <View style={styles.actionList}>
-                    <Text>Mert</Text>
-                </View>
-            </LinearGradient>
-        </View>
+        </>
     );
 };
 
@@ -73,11 +82,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     participantListArea:{
-        flex: 3,
+        flex: 1,
         flexDirection: 'column'
-    },
-    actionList:{
-        flex:2,
     },
     cardAreaShowingCards:{
         flex:4,

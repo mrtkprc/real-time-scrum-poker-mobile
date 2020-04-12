@@ -6,6 +6,7 @@ const PercentageBar = (props) => {
     return (
         <View style={styles.container}>
             <Progress.Bar
+                borderRadius={40}
                 borderWidth={2}
                 unfilledColor={"#b1adad"}
                 borderColor={"#ffffff"}
