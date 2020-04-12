@@ -1,43 +1,38 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {StyleSheet, TouchableOpacity, TextInput, View} from 'react-native';
 import {Container, Content, Item, Input, Thumbnail, Button, Text} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Formik} from 'formik';
-import {useLazyQuery, useMutation} from '@apollo/react-hooks';
-import {FIND_SESSION_BY_NUMBER_QUERY, CREATE_PARTICIPANT_MUTATION} from './queries';
+import {useMutation} from '@apollo/react-hooks';
+import {CREATE_PARTICIPANT_MUTATION} from './queries';
 import {useNavigation} from '@react-navigation/native';
+import Loading from "../../components/Loading";
 
 const AttendPoker = () => {
-    const [submittedValues, setSubmittedValues] = useState({});
-    const [addParticipant,  addParticipantData ] = useMutation(CREATE_PARTICIPANT_MUTATION);
-    const [getSessionInformation, {loading, data, error, called}] = useLazyQuery(FIND_SESSION_BY_NUMBER_QUERY);
+    const [addParticipant, {loading, error} ] = useMutation(CREATE_PARTICIPANT_MUTATION);
     const navigation = useNavigation();
     const uri = "https://facebook.github.io/react-native/docs/assets/favicon.png";
-    const formSubmitted = (values) => {
-        setSubmittedValues(values);
-        getSessionInformation({variables: {sessionNumber: parseInt(values.sessionNumber)}});
-    };
 
-    if (data && data.findSessionBySessionNumber) {
-        if(!addParticipantData.called)
-        {
-            addParticipant({variables:{nickname: submittedValues.fullName, sessionNumber: parseInt(submittedValues.sessionNumber)}})
-                .then(addedParticipantData => {
-                    navigation.navigate('PokerTable', {
-                        sessionId: data.findSessionBySessionNumber.id,
-                        participantId: addedParticipantData.data.createParticipant.id,
-                        sessionNumber: data.findSessionBySessionNumber.sessionNumber,
-                    });
+    const formSubmitted = (values) => {
+        addParticipant({variables:{nickname: values.fullName, sessionNumber: parseInt(values.sessionNumber)}})
+            .then(addedData => {
+                console.log("Clicked CreateParticipant");
+                const {data: {createParticipant:{id, session}}} = addedData;
+                navigation.navigate('PokerTable',{
+                    sessionId: session.id,
+                    sessionNumber: session.sessionNumber,
+                    participantId: id,
                 })
-                .catch(errorParticipant => alert(JSON.stringify(errorParticipant)));
-        }
-    }
+            })
+            .catch(errorParticipant => {
+                console.log("Error at Attend Poker: ", errorParticipant);
+            });
+    };
 
     const startPokerPressed = () => {
         navigation.navigate('StartPoker');
     };
 
-    //TODO:MK - addParticipantData.loading&error will be modified for more well UI.
     return (
         <Formik
             onSubmit={formSubmitted}
@@ -45,10 +40,8 @@ const AttendPoker = () => {
         >
             {({handleChange, handleBlur, handleSubmit, values}) => (
                 <>
-                { loading && <View><Text>Loading</Text></View>}
+                { loading && <Loading text="Loading" />}
                 { error && <View><Text>Error</Text></View>}
-                { addParticipantData.loading && <View><Text>Forwarding to PokerTable....</Text></View>}
-                { addParticipantData.error && <View><Text>Adding User to session failed.</Text></View>}
                 <Container style={styles.container}>
                     <Content>
                         <Thumbnail style={styles.logo} large source={{uri: uri}}/>

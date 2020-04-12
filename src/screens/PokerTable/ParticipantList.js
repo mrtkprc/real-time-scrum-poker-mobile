@@ -4,19 +4,18 @@ import { PARTICIPANTS_IN_SESSION_QUERY, NEW_PARTICIPANT_ARRIVED_SUBSCRIPTION, VO
 import { ScrollView, Text, View, FlatList} from "react-native";
 import ListItem from "./ListItem";
 import { useForceUpdate } from "../../helpers/general";
+import Loading from "../../components/Loading";
+import Error from "../../components/Error";
 
 
 const ParticipantList = (props) => {
     const [newParticipantId, setNewParticipantId] = useState("");
     const [isSubscriptionAdjusted,setIsSubscriptionAdjusted] = useState(false);
-    const {loading, error, data, subscribeToMore} = useQuery(PARTICIPANTS_IN_SESSION_QUERY, {
+    const {loading, error, data, subscribeToMore, refetch} = useQuery(PARTICIPANTS_IN_SESSION_QUERY, {
         variables: {"id": props.sessionId},
     });
 
     const forceUpdate = useForceUpdate();
-
-    if (loading) return <View><Text>Loading...</Text></View>;
-    if (error) return <ScrollView><Text>{JSON.stringify(error)}</Text></ScrollView>;
 
     if(!isSubscriptionAdjusted){
         subscribeToMore({
@@ -79,12 +78,18 @@ const ParticipantList = (props) => {
         setIsSubscriptionAdjusted(true);
 
     }
+
+    if(loading) return <Loading text="Loading Participant Lists" />
+    if(error) return <Error text={String(error)} />
+
     return (
-        <FlatList
-            data={data.session.participants}
-            renderItem={({item}) => <ListItem isNewParticipant={item.id.toString() === newParticipantId} item={item}/>}
-            keyExtractor={item => item.id}
-        />
+        <>
+            <FlatList
+                data={data.session.participants}
+                renderItem={({item}) => <ListItem isNewParticipant={item.id.toString() === newParticipantId} item={item}/>}
+                keyExtractor={item => item.id}
+            />
+        </>
     );
 };
 
