@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, } from 'react-native';
 import {useMutation} from '@apollo/react-hooks';
 import {ADD_VOTE_MUTATION} from './queries'
 import CardDeck from "./CardDeck";
 import ParticipantList from "./ParticipantList";
 import LinearGradient from 'react-native-linear-gradient';
-import { Fab, Icon } from 'native-base';
+import FabActions from "./FabActions";
 
 const PokerTable = (props) => {
     const [selectedCard, setSelectedCard] = useState('none');
-    const [isFabActive, setIsFabActive] = useState(false);
+
     const [isVotingCompleted, setIsVotingCompleted] = useState(false);
     const [isVotingStarted, setIsVotingStarted ] = useState(false);
     const [addVote] = useMutation(ADD_VOTE_MUTATION);
@@ -32,13 +32,6 @@ const PokerTable = (props) => {
 
     return (
         <>
-            <Fab
-                active={isFabActive}
-                onPress={() => setIsFabActive(!isFabActive)}
-                direction="up"
-                position="bottomRight">
-                <Icon name="settings" />
-            </Fab>
             <View style={styles.container}>
                 <View style={styles.cardArea}>
                     <View style={styles.cardAreaShowingCards}>
@@ -62,6 +55,7 @@ const PokerTable = (props) => {
                     </View>
                 </LinearGradient>
             </View>
+            <FabActions/>
         </>
     );
 };
