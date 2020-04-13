@@ -8,6 +8,10 @@ import Loading from "../../components/Loading";
 import Error from "../../components/Error";
 import LinearGradient from 'react-native-linear-gradient';
 import {Item, Input, Icon} from 'native-base';
+import { Fumi } from 'react-native-textinput-effects';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+
 const AttendPoker = () => {
     const [addParticipant, {loading, error} ] = useMutation(CREATE_PARTICIPANT_MUTATION);
     const navigation = useNavigation();
@@ -35,18 +39,66 @@ const AttendPoker = () => {
     return (
         <Formik onSubmit={formSubmitted} initialValues={{sessionNumber: '123456', fullName: 'ork'}}>
             {({handleChange, handleBlur, handleSubmit, values}) => (
+
                 <>
                 { loading && <Loading text="Loading Poker Table" />}
                 { error && <Error/>}
                 <LinearGradient colors={['#30cfd0', '#330867']} style={styles.container}>
-                    <Text>Real Time Scrum Poker</Text>
-                    <Image source={require('./../../assets/logo.png')} style={styles.logo} />
-                    <View style={styles.sessionNumberInputArea}>
-                        <TextInput style={styles.sessionNumberInput} placeholder='Session Number'/>
+                    <KeyboardAwareScrollView style={{flex:1}}>
+                    <View style={styles.headerTextView}>
+                        <Text style={styles.headerText} >Real Time Scrum Poker</Text>
+                    </View>
+                    <View style={styles.logoView}>
+                        <Image source={require('../../../assets/images/logo.png')} style={styles.logo} />
+                    </View>
+                    <View style={styles.inputArea}>
+                        <Fumi style={styles.inputText}
+                            labelStyle={{color:'#0b2d68', fontFamily:'Tahoma'}}
+                            label={'Session Number'}
+                            keyboardType='number-pad'
+                            maxLength={6}
+                            iconClass={FontAwesomeIcon}
+                            iconName={'key'}
+                            iconColor={'#eab921'}
+                            iconSize={24}
+                            iconWidth={45}
+                            inputPadding={20}
+                        />
+                    </View>
+                    <View style={styles.inputArea}>
+                        <Fumi style={styles.inputText}
+                              labelStyle={{color:'#0b2d68', fontFamily:'Tahoma'}}
+                              label={'Full Name'}
+                              iconClass={FontAwesomeIcon}
+                              iconName={'user'}
+                              iconColor={'#eab921'}
+                              iconSize={24}
+                              iconWidth={45}
+                              inputPadding={20}
+                        />
+                    </View>
+                    <View style={styles.joinPokerAreaView}>
+                        <TouchableOpacity style={styles.joinPokerArea}>
+                            <Text style={styles.joinPokerText}>Join Poker</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={[styles.centerView]}>
+                        <Text style={{color:'#b4a8a8', marginTop: 10, fontWeight: 'bold'}}>Or</Text>
+                    </View>
+                    <View style={[styles.centerView]}>
+                        <TouchableOpacity style={styles.startPokerArea}>
+                            <Text style={styles.startPokerText}> Start A Poker </Text>
+                        </TouchableOpacity>
                     </View>
 
+
+                </KeyboardAwareScrollView>
+                    <View style={styles.admobArea}>
+                        <Text>Mert</Text>
+                    </View>
                 </LinearGradient>
                 </>
+
             )}
         </Formik>
     );
@@ -58,20 +110,80 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
     },
+    headerTextView:{
+        alignItems: 'center',
+    },
+    headerText:{
+        marginTop: 10,
+        color: '#6f6c6c',
+        fontFamily:'Girassol-Regular',
+        fontSize: 30,
+    },
+    logoView:{
+        alignItems: 'center',
+    },
     logo:{
         marginVertical: 10,
-        width: 200,
-        height: 200
+        width: 128,
+        height: 128
     },
-    sessionNumberInputArea:{
-        width: '80%',
+    inputArea:{
+        flexDirection: 'row',
+        marginTop: 5
     },
-    sessionNumberInput:{
-        opacity: 0.5,
-        borderRadius: 40,
-        paddingLeft: 10,
-        backgroundColor: 'white'
+    inputText:{
+        width: '95%',
+        marginLeft: 10,
+        opacity:0.8,
+        borderRadius: 10,
+        backgroundColor: 'white',
+        flexDirection: 'row',
+        fontFamily: 'Roboto'
+    },
+    joinPokerAreaView:{
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    joinPokerArea:{
+        width: '95%',
+        marginTop:10,
+        height:40,
+        borderRadius: 20,
+        marginLeft: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#0ade04'
+    },
+    joinPokerText:{
+        color: '#fff',
+        fontSize: 24,
+        fontWeight: 'bold',
+        fontFamily: 'Roboto'
+    },
+    centerView:{
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    startPokerArea:{
+        marginTop: 1,
+        width: '50%',
+        height: 60,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    startPokerText:{
+        color: '#fff',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    admobArea:{
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'red',
+        height: 60,
+        width: '100%'
     }
+
 
 });
 

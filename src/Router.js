@@ -24,7 +24,7 @@ export default function App() {
             <HomeStack.Navigator>
                 <HomeStack.Screen
                     name="AttendPoker"
-                    options={{title: "Real Time Scrum Poker"}}
+                    options={() => ({headerShown:false})}
                     component={AttendPoker} />
                 <HomeStack.Screen
                     name="StartPoker"

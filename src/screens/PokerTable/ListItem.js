@@ -32,7 +32,7 @@ const ListItem = (props) => {
             <View style={styles.voteStatus}>
                 {vote && vote.isGiven && vote.isGiven === 1
                     ?
-                        <Image source={require('./../../assets/up_vote.png')} />
+                        <Image source={require('../../../assets/images/up_vote.png')} />
                     :
                         <></>
                 }

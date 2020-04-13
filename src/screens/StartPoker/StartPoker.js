@@ -51,20 +51,20 @@ const StartPoker = (props) => {
             <View style={styles.layoutContainer}>
                 <Image
                     style={styles.logo}
-                    source={require('./../../assets/logo.png')}/>
+                    source={require('../../../assets/images/logo.png')}/>
                 <TextInput
                     style={styles.sessionNumberTextInput}
                     editable={false}
                     value={sessionNumber}/>
                 <View style={styles.sessionButtonsArea}>
                     <TouchableOpacity onPress={copySessionNumber}>
-                        <Image source={require('./../../assets/copy.png')}/>
+                        <Image source={require('../../../assets/images/copy.png')}/>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={refreshSessionNumber}>
-                        <Image source={require('./../../assets/refresh.png')}/>
+                        <Image source={require('../../../assets/images/refresh.png')}/>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={shareSessionNumber}>
-                        <Image source={require('./../../assets/share.png')}/>
+                        <Image source={require('../../../assets/images/share.png')}/>
                     </TouchableOpacity>
                 </View>
                 <TextInput
@@ -73,7 +73,7 @@ const StartPoker = (props) => {
                     onChangeText={text => setDescription(text)}
                     value={description}/>
                 <Button onPress={createSession} style={styles.createSessionButton}>
-                    <Image source={require('./../../assets/meeting.png')} style={styles.sessionButtonImage}/>
+                    <Image source={require('../../../assets/images/meeting.png')} style={styles.sessionButtonImage}/>
                     <Text style={styles.createSessionButtonText}>Create Session</Text>
                 </Button>
             </View>
