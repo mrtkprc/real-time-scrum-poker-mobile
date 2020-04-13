@@ -36,8 +36,6 @@ const PokerTable = (props) => {
                 active={isFabActive}
                 onPress={() => setIsFabActive(!isFabActive)}
                 direction="up"
-                containerStyle={{marginRight: 40}}
-                style={{marginRight: 40}}
                 position="bottomRight">
                 <Icon name="settings" />
             </Fab>

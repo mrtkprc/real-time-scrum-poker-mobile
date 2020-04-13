@@ -29,17 +29,17 @@ const ListItem = (props) => {
     const { nickname, vote } = props.item;
     return (
         <LinearGradient colors={participantColors.bgColors} style={[styles.container]}>
-            <Text style={[styles.name, participantColors.textColor]}>
-                {nickname}
-            </Text>
             <View style={styles.voteStatus}>
                 {vote && vote.isGiven && vote.isGiven === 1
                     ?
-                        <Image style={styles.voteStatus} source={require('./../../assets/up_vote.png')} />
+                        <Image source={require('./../../assets/up_vote.png')} />
                     :
                         <></>
                 }
             </View>
+            <Text style={[styles.name, participantColors.textColor]}>
+                {nickname}
+            </Text>
         </LinearGradient>
     )
 
@@ -59,10 +59,12 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 18,
         fontWeight: 'bold',
-        marginLeft: 5,
+        marginLeft: 15,
     },
     voteStatus:{
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
+        width: 20,
+        marginLeft: 5,
     }
 });
 export default ListItem;
