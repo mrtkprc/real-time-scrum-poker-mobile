@@ -10,9 +10,9 @@ const PercentageBar = (props) => {
                 borderWidth={2}
                 unfilledColor={"#b1adad"}
                 borderColor={"#ffffff"}
-                color={"#559c21"}
+                color={"#157efa"}
                 width={null}
-                progress={0.0}
+                progress={0.7}
                 height={25}  />
         </View>
     );

@@ -109,8 +109,7 @@ const AttendPoker = () => {
                     <AdMobBanner
                         adSize="banner"
                         adUnitID="ca-app-pub-3940256099942544/6300978111"
-                        onAdFailedToLoad={error => console.error(error)}
-                    />
+                        onAdFailedToLoad={error => console.error(error)} />
                 </View>
                 </LinearGradient>
                 </>

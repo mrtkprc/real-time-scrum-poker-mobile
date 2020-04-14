@@ -6,6 +6,7 @@ import CardDeck from "./CardDeck";
 import ParticipantList from "./ParticipantList";
 import LinearGradient from 'react-native-linear-gradient';
 import FabActions from "./FabActions";
+import { AdMobBanner } from 'react-native-admob';
 
 const PokerTable = (props) => {
     const [selectedCard, setSelectedCard] = useState('none');
@@ -33,6 +34,9 @@ const PokerTable = (props) => {
     return (
         <>
             <View style={styles.container}>
+                <View style={styles.notificationArea}>
+                    <Text>Notification</Text>
+                </View>
                 <View style={styles.cardArea}>
                     <View style={styles.cardAreaShowingCards}>
                         <CardDeck
@@ -43,9 +47,6 @@ const PokerTable = (props) => {
                             cardPressed={cardPressed}
                             selectedCard={selectedCard}/>
                     </View>
-                    <View style={styles.cardAreaSelectedCardStatus}>
-                        <Text>Selected Card Status</Text>
-                    </View>
                 </View>
                 <LinearGradient colors={['#4facfe', '#00f2fe']} style={styles.votingStatusArea}>
                     <View style={styles.participantListArea}>
@@ -54,6 +55,12 @@ const PokerTable = (props) => {
                             sessionId={sessionId}/>
                     </View>
                 </LinearGradient>
+            </View>
+            <View style={styles.adMobArea}>
+                <AdMobBanner
+                    adSize="banner"
+                    adUnitID="ca-app-pub-3940256099942544/6300978111"
+                    onAdFailedToLoad={error => console.error(error)} />
             </View>
             <FabActions/>
         </>
@@ -65,12 +72,16 @@ const styles = StyleSheet.create({
         display: 'flex',
         flex: 1,
     },
+    notificationArea:{
+        width:'100%',
+        height: 50
+    },
     cardArea:{
         backgroundColor: 'red',
-        flex:3
+        flex:4
     },
     votingStatusArea:{
-        flex: 1,
+        flex: 2,
         flexDirection: 'row'
     },
     participantListArea:{
@@ -81,10 +92,12 @@ const styles = StyleSheet.create({
         flex:4,
         flexDirection: 'column',
     },
-    cardAreaSelectedCardStatus:{
-        flex: 1,
-        backgroundColor: 'magenta'
-    },
+    adMobArea:{
+        marginTop:1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%'
+    }
 });
 
 
