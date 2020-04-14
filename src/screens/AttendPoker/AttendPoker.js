@@ -194,11 +194,8 @@ const styles = StyleSheet.create({
     adMobArea:{
         justifyContent: 'center',
         alignItems: 'center',
-        height: 60,
         width: '100%'
     }
-
-
 });
 
 export default AttendPoker;

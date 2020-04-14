@@ -8,6 +8,9 @@ import {useMutation} from "@apollo/react-hooks";
 import {useNavigation} from '@react-navigation/native';
 import Loading from "../../components/Loading";
 import Error from "../../components/Error";
+import { Fumi } from 'react-native-textinput-effects';
+import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
+import { AdMobBanner } from 'react-native-admob';
 
 const StartPoker = (props) => {
     const generateRandomSessionNumber = () => {
@@ -48,39 +51,50 @@ const StartPoker = (props) => {
     };
 
     return (
-        <KeyboardAwareScrollView style={styles.container}>
-            {createSessionMutationLoading && <Loading text={"Loading..."} />}
-            {createSessionMutationError && <Error text={"Error occurred. Please try again."} />}
-            <View style={styles.layoutContainer}>
-                <Image
-                    style={styles.logo}
-                    source={require('../../../assets/images/logo.png')}/>
-                <TextInput
-                    style={styles.sessionNumberTextInput}
-                    editable={false}
-                    value={sessionNumber}/>
-                <View style={styles.sessionButtonsArea}>
-                    <TouchableOpacity onPress={copySessionNumber}>
-                        <Image source={require('../../../assets/images/copy.png')}/>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={refreshSessionNumber}>
-                        <Image source={require('../../../assets/images/refresh.png')}/>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={shareSessionNumber}>
-                        <Image source={require('../../../assets/images/share.png')}/>
-                    </TouchableOpacity>
+        <ImageBackground source={require('../../../assets/images/start-poker-bg.jpg')} style={{flex:1, width: '100%', height:'100%', resizeMode: "stretch"}}>
+            <ImageBackground style={{flex:1, backgroundColor: 'black', opacity: 0.75}}>
+                <KeyboardAwareScrollView style={styles.container}>
+                    {createSessionMutationLoading && <Loading text={"Loading..."} />}
+                    {createSessionMutationError && <Error text={"Error occurred. Please try again."} />}
+                    <View style={styles.layoutContainer}>
+                        <Image
+                            style={styles.logo}
+                            source={require('../../../assets/images/logo.png')}/>
+                        <Fumi style={styles.sessionNumberTextInput}
+                              inputStyle={{color:'black', fontWeight: 'bold', fontSize:28, paddingTop:5}}
+                              labelStyle={{color:'#0b2d68', fontFamily:'Tahoma', fontWeight: 'bold'}}
+                              value={sessionNumber}
+                              label={'Session Number'}
+                              editable={false}
+                              iconClass={FontAwesomeIcon}
+                              iconName={'key'}
+                              iconColor={'#ac0238'}/>
+                        <View style={styles.sessionButtonsArea}>
+                            <TouchableOpacity onPress={copySessionNumber}>
+                                <FontAwesomeIcon color={"#eee532"} size={48} name={"copy"} />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={refreshSessionNumber}>
+                                <FontAwesomeIcon color={"#eee532"} size={48} name={"refresh"} />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={shareSessionNumber}>
+                                <FontAwesomeIcon color={"#eee532"} size={48} name={"share-alt"} />
+                            </TouchableOpacity>
+                        </View>
+                        <Button onPress={createSession} style={styles.createSessionButton}>
+                            <Image source={require('../../../assets/images/meeting.png')} style={styles.sessionButtonImage}/>
+                            <Text style={styles.createSessionButtonText}>Create Session</Text>
+                        </Button>
+                    </View>
+                </KeyboardAwareScrollView>
+                <View style={styles.adMobArea}>
+                    <AdMobBanner
+                        adSize="banner"
+                        adUnitID="ca-app-pub-3940256099942544/6300978111"
+                        onAdFailedToLoad={error => console.error(error)}
+                    />
                 </View>
-                <TextInput
-                    style={styles.descriptionText}
-                    placeHolder="Session Description"
-                    onChangeText={text => setDescription(text)}
-                    value={description}/>
-                <Button onPress={createSession} style={styles.createSessionButton}>
-                    <Image source={require('../../../assets/images/meeting.png')} style={styles.sessionButtonImage}/>
-                    <Text style={styles.createSessionButtonText}>Create Session</Text>
-                </Button>
-            </View>
-        </KeyboardAwareScrollView>
+            </ImageBackground>
+        </ImageBackground>
     );
 };
 
@@ -101,15 +115,12 @@ const styles = StyleSheet.create({
         height: 128
     },
     sessionNumberTextInput:{
-        marginTop: 30,
-        fontSize: 24,
-        fontWeight: 'bold',
+        marginTop: 10,
         color: 'black',
-        width: '80%',
-        height: 60,
-        borderWidth: 1,
-        textAlign:'center',
-        borderRadius: 20
+        width: '90%',
+        borderRadius: 10,
+        fontSize:24,
+        fontWeight: 'bold'
     },
     sessionButtonsArea:{
         marginTop: 10,
@@ -118,13 +129,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-around'
-    },
-    descriptionText:{
-        marginTop: 20,
-        paddingLeft: 10,
-        borderWidth: 1,
-        width: '90%',
-        borderRadius: 20,
     },
     createSessionButton:{
         marginTop: 30,
@@ -135,6 +139,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderRadius: 10,
         borderWidth: 1,
+        backgroundColor: '#46dbba'
     },
     createSessionButtonText:{
         paddingLeft: 20,
@@ -153,6 +158,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'magenta',
         justifyContent: 'flex-start',
         alignItems:'flex-start'
+    },
+    adMobArea:{
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
     }
 });
 

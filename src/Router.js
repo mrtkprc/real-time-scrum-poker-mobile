@@ -16,7 +16,7 @@ export default function App() {
             theme={{
                 colors: {
                     background: '#fff',
-                    card: '#5397ff',
+                    card: '#004ab4',
                     text: '#fff',
                     primary: '#fff',
                 },
@@ -28,6 +28,7 @@ export default function App() {
                     component={AttendPoker} />
                 <HomeStack.Screen
                     name="StartPoker"
+                    options={() => ({title: "Start A Scrum Poker"})}
                     component={StartPoker} />
                 <HomeStack.Screen
                     name="PokerTable"
