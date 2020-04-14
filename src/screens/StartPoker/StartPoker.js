@@ -40,6 +40,7 @@ const StartPoker = (props) => {
             .then(({data:{createScrumMasterWithSession}}) => {
                 navigation.navigate('PokerTable', {
                     sessionId: createScrumMasterWithSession.session.id,
+                    isManager: createScrumMasterWithSession.isManager,
                     participantId: createScrumMasterWithSession.id,
                     sessionNumber: createScrumMasterWithSession.session.sessionNumber,
                 });
@@ -82,7 +83,7 @@ const StartPoker = (props) => {
                         </View>
                         <Button onPress={createSession} style={styles.createSessionButton}>
                             <Image source={require('../../../assets/images/meeting.png')} style={styles.sessionButtonImage}/>
-                            <Text style={styles.createSessionButtonText}>Create Session</Text>
+                            <Text style={styles.createSessionButtonText}>Start Scrum Poker</Text>
                         </Button>
                     </View>
                 </KeyboardAwareScrollView>

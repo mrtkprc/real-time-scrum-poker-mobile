@@ -86,7 +86,7 @@ const ParticipantList = (props) => {
     return (
         <View style={styles.container}>
             <View style={styles.percentageArea}>
-                <PercentageBar/>
+                <PercentageBar participantList={data.session.participants}/>
             </View>
             <FlatList
                 data={data.session.participants}

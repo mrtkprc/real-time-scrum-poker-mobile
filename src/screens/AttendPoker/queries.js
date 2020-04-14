@@ -8,6 +8,7 @@ export const CREATE_PARTICIPANT_MUTATION = gql`
         {
             id
             nickname
+            isManager
             session{
                 id
                 sessionNumber

@@ -22,9 +22,10 @@ const AttendPoker = () => {
     const formSubmitted = (values) => {
         addParticipant({variables:{nickname: values.fullName, sessionNumber: parseInt(values.sessionNumber)}})
             .then(addedData => {
-                const {data: {createParticipant:{id, session}}} = addedData;
+                const {data: {createParticipant:{id, isManager, session}}} = addedData;
                 navigation.navigate('PokerTable',{
                     sessionId: session.id,
+                    isManager,
                     sessionNumber: session.sessionNumber,
                     participantId: id,
                 })
@@ -39,7 +40,7 @@ const AttendPoker = () => {
     };
 
     return (
-        <Formik onSubmit={formSubmitted} initialValues={{sessionNumber: '123456', fullName: 'ork'}}>
+        <Formik onSubmit={formSubmitted} initialValues={{sessionNumber: '', fullName: ''}}>
             {({handleChange, handleBlur, handleSubmit, values}) => (
                 <>
                 { loading && <Loading text="Loading Poker Table" />}

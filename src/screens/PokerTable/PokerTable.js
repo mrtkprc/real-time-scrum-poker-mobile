@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {View, Text, StyleSheet, } from 'react-native';
+import {View, Text, StyleSheet, ScrollView } from 'react-native';
 import {useMutation} from '@apollo/react-hooks';
 import {ADD_VOTE_MUTATION} from './queries'
 import CardDeck from "./CardDeck";
@@ -14,7 +14,7 @@ const PokerTable = (props) => {
     const [isVotingCompleted, setIsVotingCompleted] = useState(false);
     const [isVotingStarted, setIsVotingStarted ] = useState(false);
     const [addVote] = useMutation(ADD_VOTE_MUTATION);
-    const { sessionId, participantId } = props.route.params;
+    const { sessionId, participantId, isManager } = props.route.params;
 
     const cardPressed = (vote) => {
         setIsVotingStarted(true);
@@ -34,9 +34,11 @@ const PokerTable = (props) => {
     return (
         <>
             <View style={styles.container}>
-                <View style={styles.notificationArea}>
-                    <Text>Notification</Text>
-                </View>
+                <LinearGradient colors={['#cfd9df', '#e2ebf0']} style={styles.notificationArea}>
+                    <ScrollView>
+                        <Text>Notifications...</Text>
+                    </ScrollView>
+                </LinearGradient>
                 <View style={styles.cardArea}>
                     <View style={styles.cardAreaShowingCards}>
                         <CardDeck
@@ -62,7 +64,10 @@ const PokerTable = (props) => {
                     adUnitID="ca-app-pub-3940256099942544/6300978111"
                     onAdFailedToLoad={error => console.error(error)} />
             </View>
-            <FabActions/>
+            {
+                isManager && String(isManager) === "1" ? <FabActions/>: <></>
+            }
+
         </>
     );
 };
@@ -74,7 +79,9 @@ const styles = StyleSheet.create({
     },
     notificationArea:{
         width:'100%',
-        height: 50
+        height: 50,
+        paddingLeft: 5,
+        paddingTop: 5
     },
     cardArea:{
         backgroundColor: 'red',
@@ -93,6 +100,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
     },
     adMobArea:{
+        backgroundColor: '#333',
         marginTop:1,
         justifyContent: 'center',
         alignItems: 'center',
