@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, TextInput, TouchableOpacity, Image, Clipboard } from "react-native";
+import { View, StyleSheet, Text, TextInput, TouchableOpacity, Image, ImageBackground, Clipboard } from "react-native";
 import { Button } from "native-base";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import Toast from 'react-native-root-toast';
 import {CREATE_SCRUM_MASTER_WITH_SESSION_MUTATION} from './queries'
 import {useMutation} from "@apollo/react-hooks";
 import {useNavigation} from '@react-navigation/native';
+import Loading from "../../components/Loading";
+import Error from "../../components/Error";
+
 const StartPoker = (props) => {
     const generateRandomSessionNumber = () => {
         return String(Math.floor(100000 + Math.random() * 900000));
@@ -46,8 +49,8 @@ const StartPoker = (props) => {
 
     return (
         <KeyboardAwareScrollView style={styles.container}>
-            {createSessionMutationLoading && <Text>Loading...</Text>}
-            {createSessionMutationError && <Text>Error :( Please try again</Text>}
+            {createSessionMutationLoading && <Loading text={"Loading..."} />}
+            {createSessionMutationError && <Error text={"Error occurred. Please try again."} />}
             <View style={styles.layoutContainer}>
                 <Image
                     style={styles.logo}
@@ -87,7 +90,6 @@ const styles = StyleSheet.create({
         flex:1,
         display: 'flex',
         flexDirection: 'column',
-        backgroundColor: '#dedede'
     },
     layoutContainer:{
         alignItems: 'center',
@@ -122,7 +124,7 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         borderWidth: 1,
         width: '90%',
-        borderRadius: 20
+        borderRadius: 20,
     },
     createSessionButton:{
         marginTop: 30,
