@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AppState, View, Text, StyleSheet, ScrollView } from 'react-native';
+import { AppState, View, Text, StyleSheet, ScrollView, BackHandler, Alert } from 'react-native';
 import {useMutation} from '@apollo/react-hooks';
 import {ADD_VOTE_MUTATION} from './queries'
 import CardDeck from "./CardDeck";
@@ -14,16 +14,29 @@ const PokerTable = (props) => {
     const [isVotingCompleted, setIsVotingCompleted] = useState(false);
 
     useEffect(() => {
+        const backHandler = BackHandler.addEventListener("hardwareBackPress", backAction);
         AppState.addEventListener("change", _handleAppStateChange);
 
         return () => {
             AppState.removeEventListener("change", _handleAppStateChange);
+            backHandler.remove();
         };
     }, []);
 
     const [addVote] = useMutation(ADD_VOTE_MUTATION);
     const { sessionId, participantId, isManager } = props.route.params;
 
+    const backAction = () => {
+        Alert.alert("Hold on!", "Are you sure you want to go back?", [
+            {
+                text: "Cancel",
+                onPress: () => null,
+                style: "cancel"
+            },
+            { text: "YES", onPress: () => BackHandler.exitApp() }
+        ]);
+        return true;
+    };
     const cardPressed = (vote) => {
         setIsVotingCompleted(false);
         setSelectedCard(vote);
