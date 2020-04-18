@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { AppState, View, Text, StyleSheet, ScrollView, BackHandler, Alert } from 'react-native';
-import {useMutation} from '@apollo/react-hooks';
+import { useMutation, useSubscription } from '@apollo/react-hooks';
 import {ADD_VOTE_MUTATION} from './queries'
 import CardDeck from "./CardDeck";
 import ParticipantList from "./ParticipantList";
 import LinearGradient from 'react-native-linear-gradient';
 import FabActions from "./FabActions";
 import { AdMobBanner } from 'react-native-admob';
+import {FORWARD_TEAM_TO_RESULT_SCREEN_SUBSCRIPTION} from './queries'
 
 const PokerTable = (props) => {
     const [appState, setAppState] = useState(AppState.currentState);
     const [selectedCard, setSelectedCard] = useState('none');
     const [isVotingCompleted, setIsVotingCompleted] = useState(false);
+
+    const { sessionId, participantId, isManager } = props.route.params;
 
     useEffect(() => {
         const backHandler = BackHandler.addEventListener("hardwareBackPress", backAction);
@@ -24,7 +27,16 @@ const PokerTable = (props) => {
     }, []);
 
     const [addVote] = useMutation(ADD_VOTE_MUTATION);
-    const { sessionId, participantId, isManager } = props.route.params;
+    const onForwardTeamToResultScreen = ({client, subscriptionData}) => {
+        console.log("Subscription Data", subscriptionData);
+    }
+    useSubscription(FORWARD_TEAM_TO_RESULT_SCREEN_SUBSCRIPTION,{
+        variables: {
+            sessionId
+        },
+        onSubscriptionData:onForwardTeamToResultScreen
+    })
+
 
     const backAction = () => {
         Alert.alert("Hold on!", "Are you sure you want to go back?", [

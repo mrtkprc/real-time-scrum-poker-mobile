@@ -48,3 +48,9 @@ export const ADD_VOTE_MUTATION = gql`
     }
 `;
 
+export const FORWARD_TEAM_TO_RESULT_SCREEN_SUBSCRIPTION = gql`
+    subscription onForwardTeamToResults($sessionId: ID!){
+        forwardTeamToResults(sessionId: $sessionId)
+    }
+`;
+
