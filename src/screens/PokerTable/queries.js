@@ -20,13 +20,7 @@ export const NEW_PARTICIPANT_ARRIVED_SUBSCRIPTION = gql`
         newParticipantArrived(sessionId: $sessionId) {
             id
             nickname
-            session{
-                id
-                sessionNumber
-            }
             vote{
-                id
-                vote
                 isGiven
             }
         }
