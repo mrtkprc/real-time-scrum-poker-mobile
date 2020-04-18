@@ -10,26 +10,21 @@ import { AdMobBanner } from 'react-native-admob';
 
 const PokerTable = (props) => {
     const [selectedCard, setSelectedCard] = useState('none');
-
     const [isVotingCompleted, setIsVotingCompleted] = useState(false);
-    const [isVotingStarted, setIsVotingStarted ] = useState(false);
+
     const [addVote] = useMutation(ADD_VOTE_MUTATION);
     const { sessionId, participantId, isManager } = props.route.params;
 
     const cardPressed = (vote) => {
-        setIsVotingStarted(true);
         setIsVotingCompleted(false);
         setSelectedCard(vote);
         addVote({variables:{vote, sessionId, participantId}})
             .then((data) => {
                 setIsVotingCompleted(true);
-                setIsVotingStarted(false);
             })
             .catch((error) => {
-                setIsVotingStarted(false);
             });
     };
-
 
     return (
         <>
@@ -42,7 +37,6 @@ const PokerTable = (props) => {
                 <View style={styles.cardArea}>
                     <View style={styles.cardAreaShowingCards}>
                         <CardDeck
-                            isVotingStarted={isVotingStarted}
                             isVotingCompleted={isVotingCompleted}
                             sessionId={sessionId}
                             participantId={participantId}
