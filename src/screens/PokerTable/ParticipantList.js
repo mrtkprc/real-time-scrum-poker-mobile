@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {useQuery, useSubscription} from '@apollo/react-hooks';
 import {PARTICIPANTS_IN_SESSION_QUERY, NEW_PARTICIPANT_ARRIVED_SUBSCRIPTION, VOTE_GIVEN_SUBSCRIPTION} from './queries'
 import {View, FlatList, StyleSheet} from "react-native";
@@ -87,8 +87,7 @@ const ParticipantList = (props) => {
             </View>
             <FlatList
                 data={data.session.participants}
-                renderItem={({item}) => <ListItem isNewParticipant={item.id.toString() === newParticipantId}
-                                                  item={item}/>}
+                renderItem={({item}) => <ListItem isManager={props.isManager} isNewParticipant={item.id.toString() === newParticipantId} item={item}/>}
                 keyExtractor={item => item.id}
             />
         </View>

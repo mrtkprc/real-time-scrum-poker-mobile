@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import {View, Text, StyleSheet, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { AppState, View, Text, StyleSheet, ScrollView } from 'react-native';
 import {useMutation} from '@apollo/react-hooks';
 import {ADD_VOTE_MUTATION} from './queries'
 import CardDeck from "./CardDeck";
@@ -9,8 +9,17 @@ import FabActions from "./FabActions";
 import { AdMobBanner } from 'react-native-admob';
 
 const PokerTable = (props) => {
+    const [appState, setAppState] = useState(AppState.currentState);
     const [selectedCard, setSelectedCard] = useState('none');
     const [isVotingCompleted, setIsVotingCompleted] = useState(false);
+
+    useEffect(() => {
+        AppState.addEventListener("change", _handleAppStateChange);
+
+        return () => {
+            AppState.removeEventListener("change", _handleAppStateChange);
+        };
+    }, []);
 
     const [addVote] = useMutation(ADD_VOTE_MUTATION);
     const { sessionId, participantId, isManager } = props.route.params;
@@ -24,6 +33,17 @@ const PokerTable = (props) => {
             })
             .catch((error) => {
             });
+    };
+
+    const _handleAppStateChange = nextAppState => {
+        if (nextAppState === "active") {
+            console.log("App has come to the foreground!");
+        }
+        else if(nextAppState === "background"){
+            console.log("App has gone to the background!");
+        }
+
+        setAppState(nextAppState);
     };
 
     return (
@@ -47,6 +67,7 @@ const PokerTable = (props) => {
                 <LinearGradient colors={['#4facfe', '#00f2fe']} style={styles.votingStatusArea}>
                     <View style={styles.participantListArea}>
                         <ParticipantList
+                            isManager={String(isManager) === "1"}
                             participantId={participantId}
                             sessionId={sessionId}/>
                     </View>

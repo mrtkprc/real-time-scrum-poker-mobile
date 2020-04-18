@@ -27,6 +27,7 @@ const ListItem = (props) => {
         }, 1000);
     }
     const { nickname, vote } = props.item;
+    const textStyle = props.isManager ? [styles.name, {color: "#8b0000"}] : [styles.name, participantColors.textColor];
     return (
         <LinearGradient colors={participantColors.bgColors} style={[styles.container]}>
             <View style={styles.voteStatus}>
@@ -37,7 +38,7 @@ const ListItem = (props) => {
                         <></>
                 }
             </View>
-            <Text style={[styles.name, participantColors.textColor]}>
+            <Text style={textStyle}>
                 {nickname}
             </Text>
         </LinearGradient>
