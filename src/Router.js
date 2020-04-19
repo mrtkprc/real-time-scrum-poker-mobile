@@ -24,6 +24,10 @@ export default function App() {
             }}>
             <HomeStack.Navigator>
                 <HomeStack.Screen
+                    name="VotingResult"
+                    options={() => ({title: "Voting Result"})}
+                    component={VotingResult} />
+                <HomeStack.Screen
                     name="AttendPoker"
                     options={() => ({headerShown:false})}
                     component={AttendPoker} />
@@ -38,10 +42,7 @@ export default function App() {
                         title:`Session: ${route.params.sessionNumber}`,
                         headerLeft: null
                     })} />
-                <HomeStack.Screen
-                    name="VotingResult"
-                    options={() => ({title: "Voting Result"})}
-                    component={VotingResult} />
+
             </HomeStack.Navigator>
         </NavigationContainer>
     );
