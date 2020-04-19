@@ -59,3 +59,9 @@ export const FORWARD_TEAM_TO_DEFINITE_SCREEN_MUTATION = gql`
         forwardTeamToDefiniteScreen(sessionId: $sessionId, screenName: $screenName, delayDuration: $delayDuration)
     }
 `;
+
+export const ALL_VOTES_DELETED = gql`
+    subscription onAllVotesDeleted($sessionId: ID!){
+        allVotesDeleted(sessionId: $sessionId)
+    }
+`;

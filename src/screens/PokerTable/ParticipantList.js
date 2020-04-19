@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import {useQuery, useSubscription} from '@apollo/react-hooks';
-import {PARTICIPANTS_IN_SESSION_QUERY, NEW_PARTICIPANT_ARRIVED_SUBSCRIPTION, VOTE_GIVEN_SUBSCRIPTION} from './queries'
+import {
+    PARTICIPANTS_IN_SESSION_QUERY,
+    NEW_PARTICIPANT_ARRIVED_SUBSCRIPTION,
+    VOTE_GIVEN_SUBSCRIPTION,
+    ALL_VOTES_DELETED
+} from './queries'
 import {View, FlatList, StyleSheet} from "react-native";
 import ListItem from "./ListItem";
 import Loading from "../../components/Loading";
@@ -10,7 +15,7 @@ import PercentageBar from "../../components/PercentageBar";
 const ParticipantList = (props) => {
     const [newParticipantId, setNewParticipantId] = useState("");
 
-    const {loading, error, data} = useQuery(PARTICIPANTS_IN_SESSION_QUERY, {
+    const {loading, error, data, refetch} = useQuery(PARTICIPANTS_IN_SESSION_QUERY, {
         variables: {"id": props.sessionId},
     });
 
@@ -64,6 +69,14 @@ const ParticipantList = (props) => {
             data: manipulateData(data)
         });
     }
+    const onAllVotesDeleted = ({client, subscriptionData}) => {
+        refetch({
+            "id": props.sessionId
+        }).then(data => {
+            props.setSelectedCard('none');
+            props.setNotificationText("New Voting Started");
+        }) ;
+    }
     useSubscription(NEW_PARTICIPANT_ARRIVED_SUBSCRIPTION, {
         variables: {
             sessionId: props.sessionId
@@ -75,6 +88,12 @@ const ParticipantList = (props) => {
             sessionId: props.sessionId
         },
         onSubscriptionData: onVoteGivenCallback
+    });
+    useSubscription(ALL_VOTES_DELETED,{
+        variables: {
+            sessionId: props.sessionId
+        },
+        onSubscriptionData: onAllVotesDeleted
     });
 
     if (loading) return <Loading text="Loading..."/>
