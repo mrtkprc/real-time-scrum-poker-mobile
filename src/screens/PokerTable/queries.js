@@ -48,14 +48,14 @@ export const ADD_VOTE_MUTATION = gql`
     }
 `;
 
-export const FORWARD_TEAM_TO_RESULT_SCREEN_SUBSCRIPTION = gql`
-    subscription onForwardTeamToResults($sessionId: ID!){
-        forwardTeamToResults(sessionId: $sessionId)
+export const FORWARD_TEAM_TO_DEFINITE_SCREEN_SUBSCRIPTION = gql`
+    subscription onForwardTeamToDefiniteScreenSubscription($sessionId: ID!){
+        forwardTeamToDefiniteScreenSubscription(sessionId: $sessionId)
     }
 `;
 
-export const FORWARD_TEAM_TO_RESULT_SCREEN_MUTATION = gql`
-    mutation forwardTeamToResultScreen($sessionId: ID!, $delayDuration: Int!){
-        forwardTeamToResultScreen(sessionId: $sessionId, delayDuration: $delayDuration)
+export const FORWARD_TEAM_TO_DEFINITE_SCREEN_MUTATION = gql`
+    mutation forwardTeamToDefiniteScreen($sessionId: ID!, $screenName: String!, $delayDuration: Int!){
+        forwardTeamToDefiniteScreen(sessionId: $sessionId, screenName: $screenName, delayDuration: $delayDuration)
     }
 `;

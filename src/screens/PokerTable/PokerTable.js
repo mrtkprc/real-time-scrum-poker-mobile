@@ -7,7 +7,7 @@ import ParticipantList from "./ParticipantList";
 import LinearGradient from 'react-native-linear-gradient';
 import FabActions from "./FabActions";
 import { AdMobBanner } from 'react-native-admob';
-import {FORWARD_TEAM_TO_RESULT_SCREEN_SUBSCRIPTION} from './queries'
+import {FORWARD_TEAM_TO_DEFINITE_SCREEN_SUBSCRIPTION} from './queries'
 import {useNavigation} from "@react-navigation/native";
 
 const PokerTable = (props) => {
@@ -30,23 +30,21 @@ const PokerTable = (props) => {
     const navigation = useNavigation();
 
     const [addVote] = useMutation(ADD_VOTE_MUTATION);
-    const onForwardTeamToResultScreen = ({subscriptionData}) => {
-        const delayDuration = subscriptionData && subscriptionData.data && subscriptionData.data.forwardTeamToResults;
-
-        if(Number.isInteger(delayDuration))
+    const onForwardTeamToDefiniteScreen = ({subscriptionData}) => {
+        const resultData = subscriptionData && subscriptionData.data && subscriptionData.data.forwardTeamToDefiniteScreenSubscription && JSON.parse(subscriptionData.data.forwardTeamToDefiniteScreenSubscription.replace("\\",""));
+        if(resultData && resultData.screenName && resultData.delayDuration && resultData.screenName !== "PokerTable" )
         {
-            setNotificationText(`Your team will be forwarded to Result Screen in ${delayDuration} seconds`);
-
+            setNotificationText(`Your team will be forwarded to Result Screen in ${resultData.delayDuration} seconds`);
             setTimeout(() => {
-                navigation.navigate("VotingResult");
-            }, (delayDuration * 1000));
+                navigation.navigate(resultData.screenName);
+            }, (parseInt(resultData.delayDuration) * 1000));
         }
     }
-    useSubscription(FORWARD_TEAM_TO_RESULT_SCREEN_SUBSCRIPTION,{
+    useSubscription(FORWARD_TEAM_TO_DEFINITE_SCREEN_SUBSCRIPTION,{
         variables: {
             sessionId
         },
-        onSubscriptionData:onForwardTeamToResultScreen
+        onSubscriptionData:onForwardTeamToDefiniteScreen
     })
 
 
