@@ -15,7 +15,7 @@ import { AdMobBanner } from 'react-native-admob';
 const AttendPoker = () => {
     const fullNameRef = useRef();
     const joinPokerRef = useRef();
-    const [addParticipant, {loading, error} ] = useMutation(CREATE_PARTICIPANT_MUTATION);
+    const [addParticipant, {loading, error}] = useMutation(CREATE_PARTICIPANT_MUTATION);
     const navigation = useNavigation();
 
 

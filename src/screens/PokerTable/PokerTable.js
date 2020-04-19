@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { AppState, View, Text, StyleSheet, ScrollView, BackHandler, Alert } from 'react-native';
 import { useMutation, useSubscription } from '@apollo/react-hooks';
-import {ADD_VOTE_MUTATION} from './queries'
+import { ADD_VOTE_MUTATION } from './queries'
 import CardDeck from "./CardDeck";
 import ParticipantList from "./ParticipantList";
 import LinearGradient from 'react-native-linear-gradient';
 import FabActions from "./FabActions";
 import { AdMobBanner } from 'react-native-admob';
 import {FORWARD_TEAM_TO_RESULT_SCREEN_SUBSCRIPTION} from './queries'
+import {useNavigation} from "@react-navigation/native";
 
 const PokerTable = (props) => {
     const [appState, setAppState] = useState(AppState.currentState);
+    const [notificationText, setNotificationText] = useState("Welcome to Real Time Scrum Poker.");
     const [selectedCard, setSelectedCard] = useState('none');
     const [isVotingCompleted, setIsVotingCompleted] = useState(false);
 
@@ -25,10 +27,20 @@ const PokerTable = (props) => {
             backHandler.remove();
         };
     }, []);
+    const navigation = useNavigation();
 
     const [addVote] = useMutation(ADD_VOTE_MUTATION);
-    const onForwardTeamToResultScreen = ({client, subscriptionData}) => {
-        console.log("Subscription Data", subscriptionData);
+    const onForwardTeamToResultScreen = ({subscriptionData}) => {
+        const delayDuration = subscriptionData && subscriptionData.data && subscriptionData.data.forwardTeamToResults;
+
+        if(Number.isInteger(delayDuration))
+        {
+            setNotificationText(`Your team will be forwarded to Result Screen in ${delayDuration} seconds`);
+
+            setTimeout(() => {
+                navigation.navigate("VotingResult");
+            }, (delayDuration * 1000));
+        }
     }
     useSubscription(FORWARD_TEAM_TO_RESULT_SCREEN_SUBSCRIPTION,{
         variables: {
@@ -39,13 +51,13 @@ const PokerTable = (props) => {
 
 
     const backAction = () => {
-        Alert.alert("Hold on!", "Are you sure you want to go back?", [
+        Alert.alert("Hold on!", "Are you sure you want to exit?", [
             {
                 text: "Cancel",
                 onPress: () => null,
                 style: "cancel"
             },
-            { text: "YES", onPress: () => BackHandler.exitApp() }
+            { text: "Yes, Let's exit.", onPress: () => BackHandler.exitApp() }
         ]);
         return true;
     };
@@ -76,7 +88,7 @@ const PokerTable = (props) => {
             <View style={styles.container}>
                 <LinearGradient colors={['#cfd9df', '#e2ebf0']} style={styles.notificationArea}>
                     <ScrollView>
-                        <Text>Notifications...</Text>
+                        <Text>{notificationText}</Text>
                     </ScrollView>
                 </LinearGradient>
                 <View style={styles.cardArea}>

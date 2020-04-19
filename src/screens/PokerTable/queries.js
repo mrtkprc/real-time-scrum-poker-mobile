@@ -54,3 +54,8 @@ export const FORWARD_TEAM_TO_RESULT_SCREEN_SUBSCRIPTION = gql`
     }
 `;
 
+export const FORWARD_TEAM_TO_RESULT_SCREEN_MUTATION = gql`
+    mutation forwardTeamToResultScreen($sessionId: ID!, $delayDuration: Int!){
+        forwardTeamToResultScreen(sessionId: $sessionId, delayDuration: $delayDuration)
+    }
+`;

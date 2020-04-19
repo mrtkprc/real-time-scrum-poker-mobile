@@ -1,9 +1,13 @@
 import React, {useState} from 'react';
 import {Button, Fab, Icon} from "native-base";
 import {Alert, View} from "react-native";
+import {useMutation} from "@apollo/react-hooks";
+import { FORWARD_TEAM_TO_RESULT_SCREEN_MUTATION } from "./queries";
 
-const FabActions = (props) => {
+const FabActions = ({sessionId}) => {
     const [isFabActive, setIsFabActive] = useState(false);
+    const [forwardTeamToResultScreen] = useMutation(FORWARD_TEAM_TO_RESULT_SCREEN_MUTATION);
+
     const _startNewVoting = () => {
         Alert.alert("Are you sure?", "Current voting will be over and start new voting?", [
             {
@@ -30,7 +34,16 @@ const FabActions = (props) => {
             {
                 text: "Yes, We can see results.",
                 onPress: () => {
-                    setIsFabActive(false);
+                    console.log("Session Id: ", sessionId);
+                    forwardTeamToResultScreen({
+                        variables:{
+                            sessionId,
+                            delayDuration: 3
+                        }
+                    }).then(data => {
+                        setIsFabActive(false);
+                    }).catch(error => console.log(error));
+
                 }
             }
         ], {cancelable: true});

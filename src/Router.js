@@ -7,6 +7,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import AttendPoker from './screens/AttendPoker/AttendPoker'
 import PokerTable from './screens/PokerTable/PokerTable';
 import StartPoker from "./screens/StartPoker/StartPoker";
+import VotingResult from "./screens/VotingResult/VotingResult";
 
 const HomeStack = createStackNavigator();
 
@@ -37,6 +38,10 @@ export default function App() {
                         title:`Session: ${route.params.sessionNumber}`,
                         headerLeft: null
                     })} />
+                <HomeStack.Screen
+                    name="VotingResult"
+                    options={() => ({title: "Voting Result"})}
+                    component={VotingResult} />
             </HomeStack.Navigator>
         </NavigationContainer>
     );
