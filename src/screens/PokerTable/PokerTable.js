@@ -37,7 +37,9 @@ const PokerTable = (props) => {
         {
             setNotificationText(`Your team will be forwarded to Result Screen in ${resultData.delayDuration} seconds`);
             setTimeout(() => {
-                navigation.navigate(resultData.screenName);
+                navigation.navigate(resultData.screenName,{
+                    sessionId
+                });
             }, (parseInt(resultData.delayDuration) * 1000));
         }
     }
@@ -114,7 +116,10 @@ const PokerTable = (props) => {
                     onAdFailedToLoad={error => console.error(error)} />
             </View>
             {
-                isManager && String(isManager) === "1" ? <FabActions/>: <></>
+                //TODO:MK
+                //isManager && String(isManager) === "1" ? <FabActions/>: <></>
+                true ? <FabActions sessionId={sessionId}/>: <></>
+
             }
 
         </>
