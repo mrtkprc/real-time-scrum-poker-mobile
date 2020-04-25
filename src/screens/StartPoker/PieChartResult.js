@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Button, Dimensions } from 'react-native';
 import {PieChart} from "react-native-chart-kit";
-import {detectPieChartColors, compareVote} from "../../helpers/ChartColorGenerator";
+import {detectPieChartColors, compareVote} from "../../helpers/VoteResultHelper";
 
 const PieChartResult = ({data}) => {
     const screenWidth = Dimensions.get('window').width;
