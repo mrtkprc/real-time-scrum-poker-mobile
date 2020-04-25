@@ -15,6 +15,7 @@ export const VOTE_INDIVIDUAL_RESULTS = gql`
                 participant{
                     nickname
                     vote{
+                        id
                         vote
                         isGiven
                     }

@@ -91,6 +91,7 @@ export function findOutlierParticipantVotes(data, lowestValue, highestValue){
             data.forEach(({participant:{nickname,vote}}) => {
                 if(vote.isGiven === 1 && vote.vote === String(searchingValueForLowest)){
                     resultForLowest.push({
+                        id: vote.id,
                         nickname:nickname,
                         vote: vote.vote
                     })
@@ -98,6 +99,7 @@ export function findOutlierParticipantVotes(data, lowestValue, highestValue){
 
                 if(vote.isGiven === 1 && vote.vote === String(searchingValueForHighest)){
                     resultForHighest.push({
+                        id: vote.id,
                         nickname:nickname,
                         vote: vote.vote
                     })

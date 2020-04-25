@@ -7,15 +7,17 @@ import Loading from "../../components/Loading";
 import Error from "../../components/Error";
 import PieChartResult from "../StartPoker/PieChartResult";
 import {findOutlierValues, findOutlierParticipantVotes} from "../../helpers/VoteResultHelper";
+import VoteResultListItem from "./VoteResultListItem";
 
 //bullhorn megafon simgesi için
 const VotingResult = ({route}) => {
-    const [highestValue, setHighestValue] = useState(13);
-    const [lowestValue, setLowestValue] = useState(0.5);
-    const [lowestValueParticipantList, setLowestValueParticipantList] = useState([]);
-    const [highestValueParticipantList, setHighestValueParticipantList] = useState([]);
+    const [highestVote, setHighestVote] = useState(13);
+    const [lowestVote, setLowestVote] = useState(0.5);
+    const [lowestVoterList, setLowestVoterList] = useState([]);
+    const [highestVoterList, setHighestVoterList] = useState([]);
+    const [allVoterList, setAllVoterList] = useState([]);
     const [isCoffeeShown, setIsCoffeeShown] = useState(true);
-    const [isOutlierValuesFound, setIsOutlierValuesFound] = useState(false);
+    const [isOutlierValuesComputedFlag,setIsOutlierValuesComputedFlag] = useState(false);
     const navigation = useNavigation();
     //TODO:MK - route.params.sessionId
     //const {sessionId} = route.params;
@@ -31,21 +33,23 @@ const VotingResult = ({route}) => {
     if (error || voteIndividualResults.loading) return <Error text={"Error occurred."} />
 
     const votes = voteIndividualResults.data && voteIndividualResults.data.session.votes;
-    {
-        /*
+        if(!isOutlierValuesComputedFlag){
+            console.log("Votes", JSON.stringify(votes));
          findOutlierValues(votes)
          .then((outlierValues) => {
             findOutlierParticipantVotes(votes, outlierValues[0], outlierValues[1])
                 .then(result => {
-                    console.log("Result: ", result);
-
+                    setIsOutlierValuesComputedFlag(true);
+                    setLowestVote(outlierValues[0]);
+                    setHighestVote(outlierValues[1] === 1000 ? "Infinity": outlierValues[1]);
+                    setLowestVoterList(result[0]);
+                    setHighestVoterList(result[1]);
                 })
                 .catch(error => console.log(error));
 
         })
          .catch(error => console.log(error))
-          */
-    }
+        }
 
 
 
@@ -54,7 +58,7 @@ const VotingResult = ({route}) => {
             <PieChartResult data={data}/>
             <View style={styles.outlierValuesArea}>
                 <View style={styles.outlierArea}>
-                    <Text>{`Highest: ${highestValue}`}</Text>
+                    <Text>{`Lowest: ${lowestVote}`}</Text>
                 </View>
                 {
                     isCoffeeShown
@@ -65,20 +69,25 @@ const VotingResult = ({route}) => {
                     :
                     <></>
                 }
-
                 <View style={styles.outlierArea}>
-                    <Text>{`Lowest: ${lowestValue}`}</Text>
+                    <Text>{`Highest: ${highestVote}`}</Text>
                 </View>
             </View>
             <View style={{alignItems: 'center', margin:5}}>
-                <Text>Highest and Lowest Sides</Text>
+                <Text>Lowest and Highest Sides</Text>
             </View>
             <View style={styles.outlierParticipantsArea}>
-                <View style={styles.outlierParticipantsForHighestArea}>
-                    <Text>Highest</Text>
-                </View>
                 <View style={styles.outlierParticipantsForLowestArea}>
-                    <Text>Lowest</Text>
+                    <FlatList
+                        data={lowestVoterList}
+                        keyExtractor={item => item.id}
+                        renderItem={({item}) => <VoteResultListItem backgroundColors={[]}  nickname={item.nickname} vote={item.vote} />} />
+                </View>
+                <View style={styles.outlierParticipantsForHighestArea}>
+                    <FlatList
+                        data={highestVoterList}
+                        keyExtractor={item => item.id}
+                        renderItem={({item}) => <VoteResultListItem backgroundColors={[]}  nickname={item.nickname} vote={item.vote} />} />
                 </View>
             </View>
             <View style={{alignItems: 'center', margin:5}}>
@@ -105,24 +114,25 @@ const styles = {
         alignItems: 'center',
     },
     outlierArea:{
-        margin: 10
+        margin: 10,
+        flexDirection: 'row'
     },
     outlierParticipantsArea:{
         margin: 5,
         flexDirection: 'row',
-        justifyContent: 'center'
-    },
-    outlierParticipantsForHighestArea:{
-        padding: 5,
-        flex:1,
-        backgroundColor: 'red'
+        justifyContent: 'center',
+        height: 60
     },
     outlierParticipantsForLowestArea:{
         padding: 5,
         flex:1,
-        backgroundColor: 'blue'
+    },
+    outlierParticipantsForHighestArea:{
+        padding: 5,
+        flex:1,
     },
     otherParticipantsArea:{
+        height: 50,
         paddingLeft: 10,
         marginBottom: 5,
         backgroundColor: 'orange'
