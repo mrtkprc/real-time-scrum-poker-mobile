@@ -5,11 +5,11 @@ import LinearGradient from 'react-native-linear-gradient';
 
 const VoteResultListItem = (props) => {
     return (
-        <LinearGradient colors={["#fff000","#ffffff"]} style={[styles.container]}>
-            <Text>
+        <LinearGradient colors={props.colors} style={[styles.container]}>
+            <Text style={styles.nickname}>
                 {props.nickname}
             </Text>
-            <Text>
+            <Text style={styles.vote}>
                 {props.vote}
             </Text>
         </LinearGradient>
@@ -26,16 +26,17 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderColor: '#424141',
     },
-    name: {
+    nickname: {
         flex: 1,
-        fontSize: 18,
+        justifyContent: 'flex-start',
+        fontSize: 16,
         fontWeight: 'bold',
         marginLeft: 15,
     },
-    voteStatus:{
+    vote:{
+        fontSize: 18,
         justifyContent: 'flex-end',
-        width: 20,
-        marginLeft: 5,
+        paddingRight:5
     }
 });
 

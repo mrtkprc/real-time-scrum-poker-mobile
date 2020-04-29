@@ -33,14 +33,28 @@ const PokerTable = (props) => {
     const [addVote] = useMutation(ADD_VOTE_MUTATION);
     const onForwardTeamToDefiniteScreen = ({subscriptionData}) => {
         const resultData = subscriptionData && subscriptionData.data && subscriptionData.data.forwardTeamToDefiniteScreenSubscription && JSON.parse(subscriptionData.data.forwardTeamToDefiniteScreenSubscription.replace("\\",""));
-        if(resultData && resultData.screenName && resultData.delayDuration && resultData.screenName !== "PokerTable" )
+        if(resultData && resultData.screenName && resultData.delayDuration)
         {
-            setNotificationText(`Your team will be forwarded to Result Screen in ${resultData.delayDuration} seconds`);
-            setTimeout(() => {
-                navigation.navigate(resultData.screenName,{
-                    sessionId
-                });
-            }, (parseInt(resultData.delayDuration) * 1000));
+            if(resultData.screenName !== "PokerTable" )
+            {
+                setNotificationText(`Your team will be forwarded to Result Screen in ${resultData.delayDuration} seconds`);
+                setTimeout(() => {
+                    navigation.navigate(resultData.screenName,{
+                        sessionId
+                    });
+                }, (parseInt(resultData.delayDuration) * 1000));
+            }
+            else if(resultData.screenName === "PokerTable")
+            {
+                setTimeout(() => {
+                    if(navigation.canGoBack()){
+                        setNotificationText(`New voting started.`);
+                        navigation.goBack()
+                    }
+                }, (parseInt(resultData.delayDuration) * 1000));
+            }
+
+
         }
     }
 
@@ -116,9 +130,8 @@ const PokerTable = (props) => {
                     onAdFailedToLoad={error => console.error(error)} />
             </View>
             {
-                //TODO:MK
-                //isManager && String(isManager) === "1" ? <FabActions/>: <></>
-                true ? <FabActions sessionId={sessionId}/>: <></>
+                isManager && String(isManager) === "1" ? <FabActions/>: <></>
+                //true ? <FabActions sessionId={sessionId}/>: <></>
 
             }
 

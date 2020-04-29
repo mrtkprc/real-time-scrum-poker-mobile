@@ -24,3 +24,9 @@ export const VOTE_INDIVIDUAL_RESULTS = gql`
         }
     }
 `;
+
+export const DELETE_ALL_VOTES = gql`
+    mutation deleteAllVotesOnSession($sessionId: ID!){
+        deleteAllVotesOnSession(sessionId: $sessionId)
+    }
+`;

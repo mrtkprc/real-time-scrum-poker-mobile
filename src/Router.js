@@ -24,13 +24,13 @@ export default function App() {
             }}>
             <HomeStack.Navigator>
                 <HomeStack.Screen
-                    name="VotingResult"
-                    options={() => ({title: "Voting Result"})}
-                    component={VotingResult} />
-                <HomeStack.Screen
                     name="AttendPoker"
                     options={() => ({headerShown:false})}
                     component={AttendPoker} />
+                <HomeStack.Screen
+                    name="VotingResult"
+                    options={() => ({title: "Voting Result"})}
+                    component={VotingResult} />
                 <HomeStack.Screen
                     name="StartPoker"
                     options={() => ({title: "Start A Scrum Poker"})}
