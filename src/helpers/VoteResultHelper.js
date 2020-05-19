@@ -53,11 +53,16 @@ export function compareVote(a, b){
 export function findOutlierValues(data) {
     let lowestValue = "1000";
     let highestValue = "0";
+    let isCoffeeShown = false;
     return new Promise((resolve, reject)=>{
         if(data.length > 0){
             data.forEach(({participant:{nickname,vote}}) => {
                 let value = vote && vote.vote;
-                if(value === "Q" || value === "C") return;
+                if(value === "Q") return;
+                if(value === "C") {
+                    isCoffeeShown = true;
+                    return;
+                }
                 if(value === "Inf"){
                     value = 1000;
                 }else{
@@ -71,6 +76,7 @@ export function findOutlierValues(data) {
             const outlierValues = [];
             outlierValues.push(lowestValue);
             outlierValues.push(highestValue);
+            outlierValues.push(isCoffeeShown);
             resolve(outlierValues);
         }
         reject("Error in finding outlier values");

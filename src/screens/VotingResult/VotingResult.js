@@ -11,7 +11,6 @@ import VoteResultListItem from "./VoteResultListItem";
 import Toast from "react-native-root-toast";
 import {FORWARD_TEAM_TO_DEFINITE_SCREEN_MUTATION} from "../PokerTable/queries";
 
-//bullhorn megafon simgesi için
 const VotingResult = ({route}) => {
     const [highestVote, setHighestVote] = useState(0);
     const [lowestVote, setLowestVote] = useState(0);
@@ -21,10 +20,11 @@ const VotingResult = ({route}) => {
     const [isCoffeeShown, setIsCoffeeShown] = useState(true);
     const [deleteAllVotesOnSession] = useMutation(DELETE_ALL_VOTES);
     const [forwardTeamToResultScreen] = useMutation(FORWARD_TEAM_TO_DEFINITE_SCREEN_MUTATION);
-    const [isOutlierValuesComputedFlag,setIsOutlierValuesComputedFlag] = useState(false);
+    const [isOutlierValuesComputed,setIsOutlierValuesComputed] = useState(false);
     const navigation = useNavigation();
 
     const {sessionId} = route.params;
+    //const sessionId = "5e971201cd920e37abb12447";
     const {loading, error, data} = useQuery(VOTE_RESULTS_QUERY, {
         variables: {sessionId},
     });
@@ -82,12 +82,13 @@ const VotingResult = ({route}) => {
     if (error || voteIndividualResults.loading) return <Error text={"Error occurred."} />
 
     const votes = voteIndividualResults.data && voteIndividualResults.data.session.votes;
-        if(!isOutlierValuesComputedFlag){
+        if(!isOutlierValuesComputed){
          findOutlierValues(votes)
          .then((outlierValues) => {
             findOutlierParticipantVotes(votes, outlierValues[0], outlierValues[1])
                 .then(result => {
-                    setIsOutlierValuesComputedFlag(true);
+                    setIsOutlierValuesComputed(true);
+                    setIsCoffeeShown(outlierValues[2]);
                     setLowestVote(outlierValues[0]);
                     setHighestVote(outlierValues[1] === 1000 ? "Infinity": outlierValues[1]);
                     setLowestVoterList(result[0]);

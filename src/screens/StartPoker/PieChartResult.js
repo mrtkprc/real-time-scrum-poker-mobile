@@ -17,8 +17,9 @@ const PieChartResult = ({data}) => {
     const composeChartData = ({voteResults}) => {
         const sortedVotes = voteResults && voteResults.sort(compareVote);
         const returningData = sortedVotes.map((voteResult) => {
-            const {vote, total} = voteResult;
+            let {vote, total} = voteResult;
             const isSpTextAdded = !(vote === "Inf" || vote === "Q" || vote === "C");
+            vote = !isSpTextAdded && vote === "C" ? "Coffee" : vote;
             const detectedColor = detectPieChartColors(vote);
             return {
                 total,
