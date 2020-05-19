@@ -44,7 +44,7 @@ const AttendPoker = () => {
             {({handleChange, handleBlur, handleSubmit, values}) => (
                 <>
                 { loading && <Loading text="Loading Poker Table" />}
-                { error && <Error text="Error occurred. Please check sessionNumber"/>}
+                { error && <Error text="Error occurred. Please Check Session Number"/>}
                 <LinearGradient colors={['#30cfd0', '#330867']} style={styles.container}>
                     <KeyboardAwareScrollView style={{flex:1}}>
                         <View style={styles.headerTextView}>
