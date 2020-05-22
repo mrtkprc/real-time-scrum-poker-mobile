@@ -3,10 +3,12 @@ import {Button, Fab, Icon} from "native-base";
 import {Alert, View} from "react-native";
 import {useMutation} from "@apollo/react-hooks";
 import { FORWARD_TEAM_TO_DEFINITE_SCREEN_MUTATION } from "./queries";
+import {DELETE_ALL_VOTES} from "../VotingResult/queries";
 
 const FabActions = ({sessionId}) => {
     const [isFabActive, setIsFabActive] = useState(false);
     const [forwardTeamToResultScreen] = useMutation(FORWARD_TEAM_TO_DEFINITE_SCREEN_MUTATION);
+    const [deleteAllVotes] = useMutation(DELETE_ALL_VOTES);
 
     const _startNewVoting = () => {
         Alert.alert("Are you sure?", "Current voting will be over and start new voting?", [
@@ -18,6 +20,7 @@ const FabActions = ({sessionId}) => {
             {
                 text: "Yes, Start New Voting.",
                 onPress: () => {
+                    deleteAllVotes({variables:{sessionId}});
                     setIsFabActive(false);
                 }
             }
