@@ -18,18 +18,21 @@ const VotingResult = ({route}) => {
     const [highestVoterList, setHighestVoterList] = useState([]);
     const [allVoterList, setAllVoterList] = useState([]);
     const [isCoffeeShown, setIsCoffeeShown] = useState(true);
+
     const [deleteAllVotesOnSession] = useMutation(DELETE_ALL_VOTES);
     const [forwardTeamToResultScreen] = useMutation(FORWARD_TEAM_TO_DEFINITE_SCREEN_MUTATION);
     const [isOutlierValuesComputed,setIsOutlierValuesComputed] = useState(false);
     const navigation = useNavigation();
 
-    const {sessionId} = route.params;
+    const {sessionId, isManager} = route.params;
     //const sessionId = "5e971201cd920e37abb12447";
-    const {loading, error, data} = useQuery(VOTE_RESULTS_QUERY, {
+    const voteResult = useQuery(VOTE_RESULTS_QUERY, {
         variables: {sessionId},
+        fetchPolicy: "network-only"
     });
     const voteIndividualResults = useQuery(VOTE_INDIVIDUAL_RESULTS,{
-        variables:{"id": sessionId}
+        variables:{"id": sessionId},
+        fetchPolicy: "network-only"
     });
     const goBackPressed = () => {
 
@@ -78,8 +81,8 @@ const VotingResult = ({route}) => {
         ], {cancelable: true});
         return true;
     };
-    if (loading || voteIndividualResults.loading) return <Loading text={"Results are coming."}/>;
-    if (error || voteIndividualResults.loading) return <Error text={"Error occurred."} />
+    if (voteResult.loading || voteIndividualResults.loading) return <Loading text={"Results are coming."}/>;
+    if (voteResult.error || voteIndividualResults.loading) return <Error text={"Error occurred."} />
 
     const votes = voteIndividualResults.data && voteIndividualResults.data.session.votes;
         if(!isOutlierValuesComputed){
@@ -103,7 +106,7 @@ const VotingResult = ({route}) => {
 
     return (
         <ScrollView style={styles.container}>
-            <PieChartResult data={data}/>
+            <PieChartResult data={voteResult.data}/>
             <View style={styles.outlierValuesArea}>
                 <View style={styles.outlierArea}>
                     <Text style={{fontWeight: 'bold', fontSize: 16, color: '#3b3b3b', fontFamily: 'Roboto'}}>{`Lowest: ${lowestVote}`}</Text>
@@ -152,7 +155,7 @@ const VotingResult = ({route}) => {
             <View style={styles.buttonArea}>
                 <View style={{flex:1, margin: 5}}><Button title={"Go Back"} onPress={goBackPressed}/></View>
                 {
-                    route && route.isManager
+                    isManager
                         ?
                     <View style={{flex:1, margin: 5}}><Button title={"Start New Voting"} onPress={startNewVotingPressed }/></View>
                         :

@@ -34,7 +34,6 @@ const FabActions = ({sessionId}) => {
             {
                 text: "Yes, We can see results.",
                 onPress: () => {
-                    console.log("Session Id: ", sessionId);
                     forwardTeamToResultScreen({
                         variables:{
                             sessionId,

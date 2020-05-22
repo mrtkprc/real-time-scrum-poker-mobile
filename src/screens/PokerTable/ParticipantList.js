@@ -17,6 +17,7 @@ const ParticipantList = (props) => {
 
     const {loading, error, data, refetch} = useQuery(PARTICIPANTS_IN_SESSION_QUERY, {
         variables: {"id": props.sessionId},
+        fetchPolicy:"network-only"
     });
 
     const onNewParticipantArrivedCallback = ({client, subscriptionData}) => {

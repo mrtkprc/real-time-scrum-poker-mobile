@@ -31,7 +31,7 @@ export function detectPieChartColors(givenVote) {
         selectedColor = "#017ed5";
     }else if(givenVote === "Inf"){
         selectedColor = "#100f0f";
-    }else if(givenVote === "C"){
+    }else if(givenVote === "C" || givenVote === "Coffee"){
         selectedColor = "#663800";
     }
 
