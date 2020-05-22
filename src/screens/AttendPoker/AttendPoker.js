@@ -20,19 +20,23 @@ const AttendPoker = () => {
 
 
     const formSubmitted = (values) => {
-        addParticipant({variables:{nickname: values.fullName, sessionNumber: parseInt(values.sessionNumber)}})
-            .then(addedData => {
-                const {data: {createParticipant:{id, isManager, session}}} = addedData;
-                navigation.navigate('PokerTable',{
-                    sessionId: session.id,
-                    isManager,
-                    sessionNumber: session.sessionNumber,
-                    participantId: id,
+        if(values.fullName !== "" || values.fullName.length < 3){
+            alert("Please, type 3 characters for full name.")
+        }else{
+            addParticipant({variables:{nickname: values.fullName, sessionNumber: parseInt(values.sessionNumber)}})
+                .then(addedData => {
+                    const {data: {createParticipant:{id, isManager, session}}} = addedData;
+                    navigation.navigate('PokerTable',{
+                        sessionId: session.id,
+                        isManager,
+                        sessionNumber: session.sessionNumber,
+                        participantId: id,
+                    })
                 })
-            })
-            .catch(errorParticipant => {
-                console.log("Error at Attend Poker: ", errorParticipant);
-            });
+                .catch(errorParticipant => {
+                    console.log("Error at Attend Poker: ", errorParticipant);
+                });
+        }
     };
 
     const startPokerPressed = () => {
