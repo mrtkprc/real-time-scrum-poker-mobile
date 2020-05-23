@@ -60,7 +60,7 @@ const StartPoker = (props) => {
                     <View style={styles.layoutContainer}>
                         <Image
                             style={styles.logo}
-                            source={require('../../../assets/images/logo.png')}/>
+                            source={require('../../../assets/images/ic_launcher.png')}/>
                         <Fumi style={styles.sessionNumberTextInput}
                               inputStyle={{color:'black', fontWeight: 'bold', fontSize:28, paddingTop:5}}
                               labelStyle={{color:'#0b2d68', fontFamily:'Tahoma', fontWeight: 'bold'}}

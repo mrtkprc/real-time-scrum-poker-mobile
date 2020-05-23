@@ -55,7 +55,7 @@ const AttendPoker = () => {
                             <Text style={styles.headerText} >Real Time Scrum Poker</Text>
                         </View>
                         <View style={styles.logoView}>
-                            <Image source={require('../../../assets/images/logo.png')} style={styles.logo} />
+                            <Image source={require('../../../assets/images/ic_launcher.png')} style={styles.logo} />
                         </View>
                         <View style={styles.inputArea}>
                             <Fumi style={styles.inputText}
