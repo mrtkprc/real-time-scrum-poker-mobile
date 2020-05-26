@@ -21,7 +21,7 @@ const AttendPoker = () => {
 
     const formSubmitted = (values) => {
         if(values.fullName.length < 3){
-            alert("Please, type 3 characters for full name.")
+            alert("Please, type at least 3 characters for full name.")
         }else{
             addParticipant({variables:{nickname: values.fullName, sessionNumber: parseInt(values.sessionNumber)}})
                 .then(addedData => {

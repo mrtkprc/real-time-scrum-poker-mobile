@@ -47,8 +47,11 @@ const PokerTable = (props) => {
             }
             else if(resultData.screenName === "PokerTable")
             {
+                const navigationDangState = navigation.dangerouslyGetState();
+                const routeIndexCount = navigationDangState.routes.length;
+                const lastRoute =  navigationDangState.routes[routeIndexCount-1].name;
                 setTimeout(() => {
-                    if(navigation.canGoBack()){
+                    if(navigation.canGoBack() && lastRoute === "VotingResult"){
                         setNotificationText(`New voting started.`);
                         navigation.goBack()
                     }
