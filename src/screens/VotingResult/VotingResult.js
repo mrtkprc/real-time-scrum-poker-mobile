@@ -1,5 +1,5 @@
-import React, {useState, useLayoutEffect} from 'react';
-import {View, ScrollView, Text, Button, Image, FlatList, Alert} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, ScrollView, Text, Button, Image, FlatList, Alert, BackHandler, AppState} from 'react-native';
 import {useNavigation} from "@react-navigation/native";
 import {useQuery, useMutation} from "@apollo/react-hooks";
 import {VOTE_RESULTS_QUERY, VOTE_INDIVIDUAL_RESULTS, DELETE_ALL_VOTES} from './queries';
@@ -18,6 +18,15 @@ const VotingResult = ({route}) => {
     const [highestVoterList, setHighestVoterList] = useState([]);
     const [allVoterList, setAllVoterList] = useState([]);
     const [isCoffeeShown, setIsCoffeeShown] = useState(true);
+
+    useEffect(() => {
+        const backHandler = BackHandler.addEventListener("hardwareBackPress", goBackPressed);
+        console.log("VotingResult Mounted");
+        return () => {
+            console.log("VotingResult Unmounted");
+            backHandler.remove();
+        };
+    }, []);
 
     const [deleteAllVotesOnSession] = useMutation(DELETE_ALL_VOTES);
     const [forwardTeamToResultScreen] = useMutation(FORWARD_TEAM_TO_DEFINITE_SCREEN_MUTATION);
