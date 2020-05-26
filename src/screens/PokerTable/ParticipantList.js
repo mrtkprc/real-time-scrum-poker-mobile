@@ -107,7 +107,7 @@ const ParticipantList = (props) => {
             </View>
             <FlatList
                 data={data.session.participants}
-                renderItem={({item}) => <ListItem isManager={props.isManager} isNewParticipant={item.id.toString() === newParticipantId} item={item}/>}
+                renderItem={({item}) => <ListItem isManager={item.isManager && item.isManager === 1} isNewParticipant={item.id.toString() === newParticipantId} item={item}/>}
                 keyExtractor={item => item.id}
             />
         </View>

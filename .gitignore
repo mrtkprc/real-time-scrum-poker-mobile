@@ -110,3 +110,4 @@ backend/node_modules
 .idea
 /backend/yarn.lock
 /android/app/build/
+/RoadMap.txt
