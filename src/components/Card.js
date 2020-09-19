@@ -7,16 +7,16 @@ const Card = (props) => {
     let imagePicture = "";
     switch (props.point) {
         case "Q":
-            imagePicture = require('./../assets/Q.png');
+            imagePicture = require('../../assets/images/Q.png');
             break;
         case "C":
-            imagePicture = require('./../assets/C.png');
+            imagePicture = require('../../assets/images/C.png');
             break;
         case "Inf":
-            imagePicture = require('./../assets/Inf.png');
+            imagePicture = require('../../assets/images/Inf.png');
             break;
         default:
-            imagePicture = require('./../assets/Q.png');
+            imagePicture = require('../../assets/images/Q.png');
             break;
 
     }

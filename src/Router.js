@@ -7,6 +7,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import AttendPoker from './screens/AttendPoker/AttendPoker'
 import PokerTable from './screens/PokerTable/PokerTable';
 import StartPoker from "./screens/StartPoker/StartPoker";
+import VotingResult from "./screens/VotingResult/VotingResult";
 
 const HomeStack = createStackNavigator();
 
@@ -16,7 +17,7 @@ export default function App() {
             theme={{
                 colors: {
                     background: '#fff',
-                    card: '#5397ff',
+                    card: '#004ab4',
                     text: '#fff',
                     primary: '#fff',
                 },
@@ -24,16 +25,24 @@ export default function App() {
             <HomeStack.Navigator>
                 <HomeStack.Screen
                     name="AttendPoker"
+                    options={() => ({headerShown:false})}
                     component={AttendPoker} />
                 <HomeStack.Screen
+                    name="VotingResult"
+                    options={() => ({headerShown:false})}
+                    component={VotingResult} />
+                <HomeStack.Screen
                     name="StartPoker"
+                    options={() => ({title: "Start A Scrum Poker"})}
                     component={StartPoker} />
                 <HomeStack.Screen
                     name="PokerTable"
                     component={PokerTable}
                     options={({route}) => ({
+                        title:`Session: ${route.params.sessionNumber}`,
                         headerLeft: null
                     })} />
+
             </HomeStack.Navigator>
         </NavigationContainer>
     );

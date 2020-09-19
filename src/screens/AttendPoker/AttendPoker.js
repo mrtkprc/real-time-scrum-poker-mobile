@@ -1,87 +1,122 @@
-import React, {useState} from 'react';
-import {StyleSheet, TouchableOpacity, TextInput, View} from 'react-native';
-import {Container, Content, Item, Input, Thumbnail, Button, Text} from 'native-base';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import React, {useRef} from 'react';
+import {StyleSheet, Image, TouchableOpacity, Text, View} from 'react-native';
 import {Formik} from 'formik';
-import {useLazyQuery, useMutation} from '@apollo/react-hooks';
-import {FIND_SESSION_BY_NUMBER_QUERY, CREATE_PARTICIPANT_MUTATION} from './queries';
+import {useMutation} from '@apollo/react-hooks';
+import {CREATE_PARTICIPANT_MUTATION} from './queries';
 import {useNavigation} from '@react-navigation/native';
+import Loading from "../../components/Loading";
+import Error from "../../components/Error";
+import LinearGradient from 'react-native-linear-gradient';
+import { Fumi } from 'react-native-textinput-effects';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import { AdMobBanner } from 'react-native-admob';
 
 const AttendPoker = () => {
-    const [submittedValues, setSubmittedValues] = useState({});
-    const [addParticipant,  addParticipantData ] = useMutation(CREATE_PARTICIPANT_MUTATION);
-    const [getSessionInformation, {loading, data, error, called}] = useLazyQuery(FIND_SESSION_BY_NUMBER_QUERY);
+    const fullNameRef = useRef();
+    const joinPokerRef = useRef();
+    const [addParticipant, {loading, error}] = useMutation(CREATE_PARTICIPANT_MUTATION);
     const navigation = useNavigation();
-    const uri = "https://facebook.github.io/react-native/docs/assets/favicon.png";
-    const formSubmitted = (values) => {
-        setSubmittedValues(values);
-        getSessionInformation({variables: {sessionNumber: parseInt(values.sessionNumber)}});
-    };
 
-    if (data && data.findSessionBySessionNumber) {
-        if(!addParticipantData.called)
-        {
-            addParticipant({variables:{nickname: submittedValues.fullName, sessionNumber: parseInt(submittedValues.sessionNumber)}})
-                .then(addedParticipantData => {
-                    navigation.navigate('PokerTable', {
-                        sessionId: data.findSessionBySessionNumber.id,
-                        participantId: addedParticipantData.data.createParticipant.id,
-                        sessionNumber: data.findSessionBySessionNumber.sessionNumber,
-                    });
+
+    const formSubmitted = (values) => {
+        if(values.fullName.length < 3){
+            alert("Please, type at least 3 characters for full name.")
+        }else{
+            addParticipant({variables:{nickname: values.fullName, sessionNumber: parseInt(values.sessionNumber)}})
+                .then(addedData => {
+                    const {data: {createParticipant:{id, isManager, session}}} = addedData;
+                    navigation.navigate('PokerTable',{
+                        sessionId: session.id,
+                        isManager,
+                        sessionNumber: session.sessionNumber,
+                        participantId: id,
+                    })
                 })
-                .catch(errorParticipant => alert(JSON.stringify(errorParticipant)));
+                .catch(errorParticipant => {
+                    console.log("Error at Attend Poker: ", errorParticipant);
+                });
         }
-    }
+    };
 
     const startPokerPressed = () => {
         navigation.navigate('StartPoker');
     };
 
-    //TODO:MK - addParticipantData.loading&error will be modified for more well UI.
     return (
-        <Formik
-            onSubmit={formSubmitted}
-            initialValues={{sessionNumber: '123456', fullName: 'ork'}}
-        >
+        <Formik onSubmit={formSubmitted} initialValues={{sessionNumber: '', fullName: ''}}>
             {({handleChange, handleBlur, handleSubmit, values}) => (
                 <>
-                { loading && <View><Text>Loading</Text></View>}
-                { error && <View><Text>Error</Text></View>}
-                { addParticipantData.loading && <View><Text>Forwarding to PokerTable....</Text></View>}
-                { addParticipantData.error && <View><Text>Adding User to session failed.</Text></View>}
-                <Container style={styles.container}>
-                    <Content>
-                        <Thumbnail style={styles.logo} large source={{uri: uri}}/>
-                        <Item style={styles.sessionNumberItem} rounded>
-                            <TextInput
-                                name={"sessionNumber"}
+                { loading && <Loading text="Loading Poker Table" />}
+                { error && <Error text="Error occurred. Please Check Session Number"/>}
+                <LinearGradient colors={['#30cfd0', '#330867']} style={styles.container}>
+                    <KeyboardAwareScrollView style={{flex:1}}>
+                        <View style={styles.headerTextView}>
+                            <Text style={styles.headerText} >Real Time Scrum Poker</Text>
+                        </View>
+                        <View style={styles.logoView}>
+                            <Image source={require('../../../assets/images/ic_launcher.png')} style={styles.logo} />
+                        </View>
+                        <View style={styles.inputArea}>
+                            <Fumi style={styles.inputText}
+                                inputStyle={{color:'#000000', fontWeight: 'bold'}}
+                                labelStyle={{color:'#0b2d68', fontFamily:'Tahoma'}}
+                                label={'Session Number'}
                                 value={values.sessionNumber}
-                                onChangeText={handleChange('sessionNumber')}
-                                maxLength={6}
-                                style={styles.sessionNumberInput}
                                 keyboardType='number-pad'
-                                placeholder='Session Number'/>
-                        </Item>
-                        <Item style={styles.fullNameItem} regular>
-                            <Icon style={{marginLeft: 10}} size={48} color='#06E399' active name='user'/>
-                            <Input
-                                name={"fullName"}
-                                value={values.fullName}
-                                onChangeText={handleChange('fullName')}
-                                style={styles.fullNameInput}
-                                placeholder='Full Name'/>
-                        </Item>
-                    </Content>
-                    <Content>
-                        <Button onPress={handleSubmit} style={styles.createSessionButton} iconLeft success full>
-                            <Icon type="FontAwesome" size={32} color='white' name='user'/>
-                            <Text style={styles.createSessionButtonText}>Create Session</Text>
-                        </Button>
-                    </Content>
-                    <TouchableOpacity onPress={startPokerPressed} style={styles.startAPokerButton}>
-                        <Text style={{color: 'yellow', fontSize: 18, fontWeight: 'bold'}}>Start A Poker</Text>
-                    </TouchableOpacity>
-                </Container>
+                                maxLength={6}
+                                returnKeyType = { "next" }
+                                iconClass={FontAwesomeIcon}
+                                iconName={'key'}
+                                blurOnSubmit={false}
+                                onSubmitEditing={() => fullNameRef.current.focus()}
+                                iconColor={'#eab921'}
+                                iconSize={24}
+                                iconWidth={45}
+                                inputPadding={20}
+                                onChangeText={handleChange('sessionNumber')}
+                            />
+                        </View>
+                        <View style={styles.inputArea}>
+                            <Fumi ref={fullNameRef}
+                                  inputStyle={{color:'#000000', fontWeight: 'bold'}}
+                                  style={styles.inputText}
+                                  value={values.fullName}
+                                  labelStyle={{color:'#0b2d68', fontFamily:'Tahoma'}}
+                                  label={'Full Name'}
+                                  iconClass={FontAwesomeIcon}
+                                  iconName={'user'}
+                                  iconColor={'#eab921'}
+                                  iconSize={24}
+                                  iconWidth={45}
+                                  inputPadding={20}
+                                  onSubmitEditing={() => formSubmitted(values)}
+                                  returnKeyType = { "go" }
+                                  blurOnSubmit={false}
+                                  onChangeText={handleChange('fullName')}
+                            />
+                        </View>
+                        <View style={styles.joinPokerAreaView}>
+                            <TouchableOpacity ref={joinPokerRef} onPress={handleSubmit} style={styles.joinPokerArea}>
+                                <Text style={styles.joinPokerText}>Join Poker</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={[styles.centerView]}>
+                            <Text style={{color:'#b4a8a8', marginTop: 10, fontWeight: 'bold'}}>Or</Text>
+                        </View>
+                        <View style={[styles.centerView]}>
+                            <TouchableOpacity onPress={startPokerPressed} style={styles.startPokerArea}>
+                                <Text style={styles.startPokerText}> Start A Poker </Text>
+                            </TouchableOpacity>
+                        </View>
+                </KeyboardAwareScrollView>
+                <View style={styles.adMobArea}>
+                    <AdMobBanner
+                        adSize="banner"
+                        adUnitID="ca-app-pub-3940256099942544/6300978111"
+                        onAdFailedToLoad={error => console.error(error)} />
+                </View>
+                </LinearGradient>
                 </>
             )}
         </Formik>
@@ -89,63 +124,81 @@ const AttendPoker = () => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-        display: 'flex',
-        flexDirection: 'column'
-    },
-    header: {
-        backgroundColor: "#06BEE3",
-    },
-    headerTitle: {
-        marginLeft: 'auto',
-        marginRight: 'auto',
-    },
-    logo: {
-        marginTop: 30,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-    },
-    sessionNumberItem: {
-        marginTop: 15,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        width: '60%'
-    },
-    sessionNumberInput: {
-        textAlign: 'center',
-        fontSize: 24,
-    },
-    fullNameItem: {
-        marginTop: 30,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        width: '90%',
-        borderColor: '#06BEE3',
-        borderWidth: 3
-    },
-    fullNameInput: {
-        textAlign: 'center',
-        fontSize: 24,
-        marginLeft: -40
-    },
-    createSessionButton: {
-        width: '80%',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        color: '#06BEE3',
-        marginBottom: 10
-    },
-    createSessionButtonText: {
-        fontSize: 22,
-    },
-    startAPokerButton: {
-        justifyContent: 'flex-end',
+    container:{
+        flex: 1,
+        justifyContent: 'flex-start',
         alignItems: 'center',
-        width: '100%',
-        backgroundColor: "#333",
-        height: 50,
-        textAlign: 'center',
-        paddingBottom: 10,
+    },
+    headerTextView:{
+        alignItems: 'center',
+    },
+    headerText:{
+        marginTop: 10,
+        color: '#6f6c6c',
+        fontFamily:'Girassol-Regular',
+        fontSize: 30,
+    },
+    logoView:{
+        alignItems: 'center',
+    },
+    logo:{
+        marginVertical: 10,
+        width: 128,
+        height: 128
+    },
+    inputArea:{
+        flexDirection: 'row',
+        marginTop: 5
+    },
+    inputText:{
+        width: '95%',
+        marginLeft: 10,
+        opacity:0.8,
+        borderRadius: 10,
+        backgroundColor: 'white',
+        flexDirection: 'row',
+        fontFamily: 'Roboto'
+    },
+    joinPokerAreaView:{
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    joinPokerArea:{
+        width: '95%',
+        marginTop:10,
+        height:40,
+        borderRadius: 20,
+        marginLeft: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#0ade04'
+    },
+    joinPokerText:{
+        color: '#fff',
+        fontSize: 24,
+        fontWeight: 'bold',
+        fontFamily: 'Roboto'
+    },
+    centerView:{
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    startPokerArea:{
+        marginTop: 1,
+        width: '50%',
+        height: 60,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    startPokerText:{
+        color: '#fff',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    adMobArea:{
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%'
     }
 });
 

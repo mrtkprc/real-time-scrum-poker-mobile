@@ -7,6 +7,7 @@ export const PARTICIPANTS_IN_SESSION_QUERY = gql`
             participants{
                 id
                 nickname
+                isManager
                 vote{
                     isGiven
                 }
@@ -20,13 +21,8 @@ export const NEW_PARTICIPANT_ARRIVED_SUBSCRIPTION = gql`
         newParticipantArrived(sessionId: $sessionId) {
             id
             nickname
-            session{
-                id
-                sessionNumber
-            }
+            isManager
             vote{
-                id
-                vote
                 isGiven
             }
         }
@@ -54,3 +50,20 @@ export const ADD_VOTE_MUTATION = gql`
     }
 `;
 
+export const FORWARD_TEAM_TO_DEFINITE_SCREEN_SUBSCRIPTION = gql`
+    subscription onForwardTeamToDefiniteScreenSubscription($sessionId: ID!){
+        forwardTeamToDefiniteScreenSubscription(sessionId: $sessionId)
+    }
+`;
+
+export const FORWARD_TEAM_TO_DEFINITE_SCREEN_MUTATION = gql`
+    mutation forwardTeamToDefiniteScreen($sessionId: ID!, $screenName: String!, $delayDuration: Int!){
+        forwardTeamToDefiniteScreen(sessionId: $sessionId, screenName: $screenName, delayDuration: $delayDuration)
+    }
+`;
+
+export const ALL_VOTES_DELETED = gql`
+    subscription onAllVotesDeleted($sessionId: ID!){
+        allVotesDeleted(sessionId: $sessionId)
+    }
+`;

@@ -1,91 +1,130 @@
-import React, { useState, useEffect } from 'react';
-import { useQuery } from '@apollo/react-hooks';
-import { PARTICIPANTS_IN_SESSION_QUERY, NEW_PARTICIPANT_ARRIVED_SUBSCRIPTION, VOTE_GIVEN_SUBSCRIPTION } from './queries'
-import { ScrollView, Text, View, FlatList} from "react-native";
+import React, { useState } from 'react';
+import {useQuery, useSubscription} from '@apollo/react-hooks';
+import {
+    PARTICIPANTS_IN_SESSION_QUERY,
+    NEW_PARTICIPANT_ARRIVED_SUBSCRIPTION,
+    VOTE_GIVEN_SUBSCRIPTION,
+    ALL_VOTES_DELETED
+} from './queries'
+import {View, FlatList, StyleSheet} from "react-native";
 import ListItem from "./ListItem";
-import { useForceUpdate } from "../../helpers/general";
-
+import Loading from "../../components/Loading";
+import Error from "../../components/Error";
+import PercentageBar from "../../components/PercentageBar";
 
 const ParticipantList = (props) => {
     const [newParticipantId, setNewParticipantId] = useState("");
-    const [isSubscriptionAdjusted,setIsSubscriptionAdjusted] = useState(false);
-    const {loading, error, data, subscribeToMore} = useQuery(PARTICIPANTS_IN_SESSION_QUERY, {
+
+    const {loading, error, data, refetch} = useQuery(PARTICIPANTS_IN_SESSION_QUERY, {
         variables: {"id": props.sessionId},
+        fetchPolicy:"network-only"
     });
 
-    const forceUpdate = useForceUpdate();
-
-    if (loading) return <View><Text>Loading...</Text></View>;
-    if (error) return <ScrollView><Text>{JSON.stringify(error)}</Text></ScrollView>;
-
-    if(!isSubscriptionAdjusted){
-        subscribeToMore({
-            document: NEW_PARTICIPANT_ARRIVED_SUBSCRIPTION,
-            variables: {
-                sessionId: props.sessionId
-            },
-            updateQuery: (prev, {subscriptionData}) => {
-                if (!subscriptionData.data) return prev;
-                const newParticipant = subscriptionData.data.newParticipantArrived;
-                if (!prev.session.participants.find((participant) => participant.id === newParticipant.id)) {
-                    setNewParticipantId(newParticipant.id);
-                    return {
-                        ...prev,
-                        session: {
-                            ...prev.session,
-                            participants: [
-                                newParticipant,
-                                ...prev.session.participants
-                            ]
-                        }
-                    };
-                } else {
-                    return prev;
+    const onNewParticipantArrivedCallback = ({client, subscriptionData}) => {
+        const newParticipantArrivedData = subscriptionData && subscriptionData.data && subscriptionData.data.newParticipantArrived;
+        client.writeQuery({
+            query: PARTICIPANTS_IN_SESSION_QUERY,
+            variables: {"id": props.sessionId},
+            data: {
+                session: {
+                    ...data.session,
+                    participants: [
+                        newParticipantArrivedData,
+                        ...data.session.participants
+                    ]
                 }
             }
         });
-        subscribeToMore({
-            document: VOTE_GIVEN_SUBSCRIPTION,
-            variables: {
-                sessionId: props.sessionId
-            },
-            updateQuery:  (prev, {subscriptionData}) => {
-                if (!subscriptionData.data) return prev;
-                const voteGiven = subscriptionData.data.voteGiven;
-                if(voteGiven) {
-                    prev.session.participants.forEach((participant, index) => {
-                        if(participant.id === voteGiven.participant.id) {
-                            const copyValue = Object.assign({},prev);
+        setNewParticipantId(newParticipantArrivedData.id);
+    };
+    const onVoteGivenCallback = ({client, subscriptionData}) => {
+        const voteGiven = subscriptionData && subscriptionData.data && subscriptionData.data.voteGiven;
 
-                            copyValue.session.participants[index] = {
-                                ...participant,
-                                vote: {
-                                    isGiven: 1
-                                }
-                            };
+        const manipulateData = (data) => {
 
-                            forceUpdate();
-                            return copyValue;
-                        }
-                        else
-                            return prev;
-                    })
+            let participants = [...data.session.participants];
+            let foundedIndex = -1;
+            participants.forEach((participant, index) => {
+                if(participant.id === voteGiven.participant.id){
+                    foundedIndex = index;
                 }
-                else
-                    return prev;
+            })
+            const deepCopy = {
+                ...data
+            };
+
+            if(foundedIndex >= 0)
+            {
+                deepCopy.session.participants[foundedIndex] = {
+                    ...deepCopy.session.participants[foundedIndex],
+                    vote: voteGiven
+                }
             }
+
+            return deepCopy;
+        }
+
+        client.writeQuery({
+            query: PARTICIPANTS_IN_SESSION_QUERY,
+            variables: {"id": props.sessionId},
+            data: manipulateData(data)
         });
-
-        setIsSubscriptionAdjusted(true);
-
     }
+    const onAllVotesDeleted = ({client, subscriptionData}) => {
+        refetch({
+            "id": props.sessionId
+        }).then(data => {
+            props.setSelectedCard('none');
+            props.setNotificationText("New Voting Started");
+        }) ;
+    }
+    useSubscription(NEW_PARTICIPANT_ARRIVED_SUBSCRIPTION, {
+        variables: {
+            sessionId: props.sessionId
+        },
+        onSubscriptionData: onNewParticipantArrivedCallback
+    });
+    useSubscription(VOTE_GIVEN_SUBSCRIPTION,{
+        variables: {
+            sessionId: props.sessionId
+        },
+        onSubscriptionData: onVoteGivenCallback
+    });
+    useSubscription(ALL_VOTES_DELETED,{
+        variables: {
+            sessionId: props.sessionId
+        },
+        onSubscriptionData: onAllVotesDeleted
+    });
+
+    if (loading) return <Loading text="Loading..."/>
+    if (error) return <Error text={String(error)}/>
+
     return (
-        <FlatList
-            data={data.session.participants}
-            renderItem={({item}) => <ListItem isNewParticipant={item.id.toString() === newParticipantId} item={item}/>}
-            keyExtractor={item => item.id}
-        />
+        <View style={styles.container}>
+            <View style={styles.percentageArea}>
+                <PercentageBar participantList={data.session.participants}/>
+            </View>
+            <FlatList
+                data={data.session.participants}
+                renderItem={({item}) => <ListItem isManager={item.isManager && item.isManager === 1} isNewParticipant={item.id.toString() === newParticipantId} item={item}/>}
+                keyExtractor={item => item.id}
+            />
+        </View>
     );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        flexDirection: 'column',
+    },
+    percentageArea: {
+        display: 'flex',
+        height: 30,
+        justifyContent: 'center',
+        marginBottom: 3
+    }
+});
 
 export default ParticipantList;

@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, StyleSheet, View, Image } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 
 const ListItem = (props) => {
     const oldParticipantColors = {
-        bgColor: {backgroundColor: 'gray'},
-        textColor: {color: 'black'}
+        textColor: {color: '#423f3f'},
+        bgColors: ['#cfd9df', '#e2ebf0']
     };
 
     const newParticipantColors = {
-        bgColor: {backgroundColor: 'green'},
-        textColor: {color: 'white'}
+        textColor: {color: '#a30909'},
+        bgColors: ['#43e97b', '#38f9d7']
     };
 
     const [participantColors, setParticipantColors] = useState(oldParticipantColors);
@@ -26,15 +27,21 @@ const ListItem = (props) => {
         }, 1000);
     }
     const { nickname, vote } = props.item;
+    const textStyle = props.isManager ? [styles.name, {color: "#8b0000"}] : [styles.name, participantColors.textColor];
     return (
-        <View style={[styles.container, participantColors.bgColor]}>
-            <Text style={[styles.name, participantColors.textColor]}>
+        <LinearGradient colors={participantColors.bgColors} style={[styles.container]}>
+            <View style={styles.voteStatus}>
+                {vote && vote.isGiven && vote.isGiven === 1
+                    ?
+                        <Image source={require('../../../assets/images/up_vote.png')} />
+                    :
+                        <></>
+                }
+            </View>
+            <Text style={textStyle}>
                 {nickname}
             </Text>
-            <Text style={styles.voteStatus}>
-                {vote && vote.isGiven === 1 ? "Yes" : "No"}
-            </Text>
-        </View>
+        </LinearGradient>
     )
 
 };
@@ -47,19 +54,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 40,
         borderBottomWidth: 1,
-        borderColor: '#f1f1f1',
+        borderColor: '#424141',
     },
     name: {
-        flex: 3,
-        fontSize: 24,
+        flex: 1,
+        fontSize: 18,
+        fontWeight: 'bold',
         marginLeft: 15,
     },
-    voteStatus: {
-        flex: 1,
-        fontSize: 24,
-        marginRight: 10,
-        textAlign: 'right',
+    voteStatus:{
+        justifyContent: 'flex-end',
+        width: 20,
+        marginLeft: 5,
     }
-
 });
 export default ListItem;
