@@ -80,6 +80,7 @@ const PokerTable = (props) => {
         ]);
         return true;
     };
+
     const cardPressed = (vote) => {
         setIsVotingCompleted(false);
         setSelectedCard(vote);

@@ -115,6 +115,16 @@ const VotingResult = ({route}) => {
 
     return (
         <ScrollView style={styles.container}>
+            <View style={styles.buttonArea}>
+                <View style={{flex:1, margin: 5}}><Button title={"Go Back"} onPress={goBackPressed}/></View>
+                {
+                    isManager
+                        ?
+                        <View style={{flex:1, margin: 5}}><Button title={"Start New Voting"} onPress={startNewVotingPressed }/></View>
+                        :
+                        <></>
+                }
+            </View>
             <PieChartResult data={voteResult.data}/>
             <View style={styles.outlierValuesArea}>
                 <View style={styles.outlierArea}>
@@ -161,16 +171,7 @@ const VotingResult = ({route}) => {
                         renderItem={({item:{participant}}) => <VoteResultListItem colors={["#f5f7fa","#c3cfe2"]}  nickname={participant.nickname} vote={participant.vote.vote} />} />
                 </View>
             </View>
-            <View style={styles.buttonArea}>
-                <View style={{flex:1, margin: 5}}><Button title={"Go Back"} onPress={goBackPressed}/></View>
-                {
-                    isManager
-                        ?
-                    <View style={{flex:1, margin: 5}}><Button title={"Start New Voting"} onPress={startNewVotingPressed }/></View>
-                        :
-                    <></>
-                }
-            </View>
+
         </ScrollView>
     );
 };

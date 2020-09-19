@@ -11,15 +11,19 @@ import { getMainDefinition } from 'apollo-utilities';
 import Router from './src/Router';
 import {name as appName} from './app.json';
 
-//uri: 'http://192.168.1.27:4000/graphql',
+//uri: 'http://192.168.1.22:4000/graphql',
+//uri: 'https://api.realtimescrumpoker.site/graphql',
+//uri: 'https://rt-scrum-poker-server.herokuapp.com/graphql',
 const httpLink = new HttpLink({
-    uri: 'https://rt-scrum-poker-server.herokuapp.com/graphql',
+    uri: 'https://api.realtimescrumpoker.site/graphql',
 });
 
 // Create a WebSocket link:
-//uri: 'ws://192.168.1.27:4000/graphql',
+//uri: 'ws://192.168.1.22:4000/graphql',
+//uri: 'wss://api.realtimescrumpoker.site/graphql',
+//uri: 'wss://rt-scrum-poker-server.herokuapp.com/graphql',
 const wsLink = new WebSocketLink({
-    uri: 'wss://rt-scrum-poker-server.herokuapp.com/graphql',
+    uri: 'wss://api.realtimescrumpoker.site/graphql',
     options: {
         reconnect: true
     }

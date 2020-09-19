@@ -29,7 +29,7 @@ export default function App() {
                     component={AttendPoker} />
                 <HomeStack.Screen
                     name="VotingResult"
-                    options={() => ({title: "Voting Result"})}
+                    options={() => ({headerShown:false})}
                     component={VotingResult} />
                 <HomeStack.Screen
                     name="StartPoker"

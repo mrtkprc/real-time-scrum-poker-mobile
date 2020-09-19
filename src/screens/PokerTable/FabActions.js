@@ -35,7 +35,7 @@ const FabActions = ({sessionId}) => {
                 style: "cancel"
             },
             {
-                text: "Yes, We can see results.",
+                text: "Yes, we can see results.",
                 onPress: () => {
                     forwardTeamToResultScreen({
                         variables:{
